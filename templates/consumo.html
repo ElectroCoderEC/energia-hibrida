@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <title>CONSUMO ENERGÉTICO</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    :root {
+      --unach-blue: #1d3557;
+      --unach-red: #e63946;
+      --unach-light-blue: #457b9d;
+      --unach-light: #f1faee;
+      --purple-dark: #1d3557;
+      --purple-light: #0052b3;
+    }
+    
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+    
+    .left-panel {
+    width: 30%;
+    color: white;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Necesario para posicionar el pseudo-elemento */
+    /* Gradiente como fondo principal */
+    background: linear-gradient(0deg, #010d1e 0%, #06264d 50%, #1d3557 100%);
+}
+
+.left-panel::before {
+    content: '';
+    background: url('images/fondo8.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.5; /* Opacidad SOLO para la imagen (0.5 = 50%) */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0; /* Coloca detrás del contenido */
+}
+
+/* Asegura que el contenido esté por encima de la imagen */
+.left-panel > * {
+    position: relative;
+    z-index: 1;
+}
+    
+    .logo {
+      margin-bottom: 60px;
+    }
+    
+    .logo img {
+      height: 40px;
+    }
+    
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      margin-top: auto;
+      border-radius: 3px;
+      position: relative;
+    }
+    
+    .progress {
+      width: 66%;
+      height: 100%;
+      background-color: var(--unach-red);
+      border-radius: 3px;
+    }
+    
+    .step {
+      font-size: 14px;
+      color: white;
+      margin-top: 10px;
+    }
+    
+    .map-section {
+      flex: 1;
+      position: relative;
+    }
+    
+    .map {
+      width: 100%;
+      height: 100%;
+     
+      background-size: cover;
+    }
+    
+    .search-container {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 600px;
+      z-index: 10;
+    }
+    
+    .search-box {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-box input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    
+    .search-icon {
+      padding: 15px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .map-toggle {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    
+    .toggle-btn {
+      padding: 8px 25px;
+      background: white;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .toggle-btn.active {
+      background: var(--unach-blue);
+      color: white;
+    }
+    
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      max-width: 450px;
+      text-align: center;
+    }
+    
+    .bottom-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+    
+    .btn {
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    
+    .btn-back {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+    }
+    
+    .btn-next {
+      background: var(--unach-red);
+      color: white;
+    }
+    
+    .zoom-controls {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .zoom-btn {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+
+        .controls-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .map-toggle {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .map-toggle.active {
+            background-color: #1a365d;
+            color: white;
+        }
+        
+     
+        
+        .area-label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+
+        #resetBtn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #148db2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 2;
+            border-radius: 30px;
+        }
+        
+       
+        .contenido-right{
+          padding: 30px;
+        }
+
+
+        .table-container {
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .input-group {
+            max-width: 150px;
+        }
+        .btn-orange {
+            background-color: #fd7e14;
+            border-color: #fd7e14;
+            color: white;
+            width: 30px;
+            border-radius: 20px;
+        }
+        .btn-orange:hover {
+            background-color: #e76b00;
+            border-color: #e76b00;
+            color: white;
+        }
+        .btn-delete {
+            color: #fd7e14;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-delete:hover {
+            color: #e76b00;
+        }
+        .header-row {
+            background-color: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .consumo-total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #1d3557;
+            color: white;
+            z-index: 2;
+        }
+
+  </style>
+</head>
+<body>
+  <div class="left-panel">
+    <img class="top-image" src="images/logo_blanco.png">
+
+    <div class="panel-content">
+      <br>
+      <br>
+      <br>
+
+      <h1 class="title">Ingresa el consumo energético</h1>
+      <br>
+      <p class="subtitle">¿Que equipos eléctricos/electrónicos existen en la institución?</p>
+      <br>
+      <br>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      
+      <div class="step">Paso 2/3</div>
+    
+  </div>
+  
+    
+  
+  </div>
+  
+  <div class="map-section">
+   
+
+    <div class="contenido-right" >
+
+      <b><h2 style="color: #0052b3;">Calculadora de consumos</h2></b>
+    
+    
+
+      <hr style="border-color:black;">
+
+    
+      
+
+      <div >
+        
+        <div class="table-container">
+            <table class="table table-bordered table-hover">
+                <thead class="header-row">
+                    <tr>
+                        <th class="align-middle">Equipo</th>
+                        <th class="align-middle text-center">Cantidad</th>
+                        <th class="align-middle text-center">Horas/Día</th>
+                        <th class="align-middle text-center">Consumo Wh/día</th>
+                        <th class="align-middle text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="equiposTableBody">
+                    <tr id="item-1">
+                        <td class="align-middle">Computadora Escritorio</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="200">
+                                <button class="btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="6" min="0" max="24">
+                                <button class="btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">1200 Wh/día</td>
+                       <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                    <tr id="item-2">
+                        <td class="align-middle">Proyector</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="280">
+                                <button class="btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="4" min="0" max="24">
+                                <button class="btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">1120 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                 
+                    <tr id="item-4">
+                        <td class="align-middle">Lámpara LED Aula</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="8" min="0" data-consumo="18">
+                                <button class="btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="8" min="0" max="24">
+                                <button class=" btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">1152 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                    <tr id="item-5">
+                        <td class="align-middle">Impresora Multifuncional</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="50">
+                                <button class=" btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="2" min="0" max="24">
+                                <button class=" btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">100 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                    <tr id="item-6">
+                        <td class="align-middle">Pizarra Digital Interactiva</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="120">
+                                <button class=" btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class="btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="4" min="0" max="24">
+                                <button class=" btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">480 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                    <tr id="item-7">
+                        <td class="align-middle">Equipo de Sonido</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="80">
+                                <button class="btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="2" min="0" max="24">
+                                <button class=" btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">160 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                    <tr id="item-8">
+                        <td class="align-middle">Laptops</td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="100">
+                                <button class=" btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            <div class="input-group mx-auto">
+                                <button class=" btn-orange btn-sm decrementarHoras" type="button">−</button>
+                                <input type="number" class="form-control form-control-sm text-center horas" value="8" min="0" max="24">
+                                <button class=" btn-orange btn-sm incrementarHoras" type="button">+</button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center consumo">800 Wh/día</td>
+                        <td class="align-middle text-center">
+                          <button class="btn btn-delete eliminarFila">
+                              <i class="fas fa-trash-alt"></i> <!-- Ícono de basurero de Font Awesome -->
+                          </button>
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="col-md-12">
+          <p class="consumo-total">Consumo total: <span id="consumoTotal">12512</span> Wh/día</p>
+      </div>
+
+        <div class="row">
+            
+            
+        </div>
+    </div>
+      
+  </div>
+    
+   
+    
+    <div class="bottom-controls">
+      <div onclick="location.href = 'gps'" class="btn btn-back">Atrás</div>
+      <div onclick="location.href = 'presupuesto'" class="btn btn-danger">Siguiente</div>
+    </div>
+    
+   
+  </div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Calcular consumo inicial
+        calcularConsumoTotal();
+        
+        // Agregar listeners a los botones existentes
+        addListeners();
+        
+        // Botón para agregar nuevo equipo
+        document.getElementById('agregarEquipo').addEventListener('click', function() {
+            agregarNuevoEquipo();
+        });
+    });
+    
+    function addListeners() {
+        // Botones de cantidad
+        document.querySelectorAll('.decrementarCantidad').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                let input = this.nextElementSibling;
+                if (input.value > 0) {
+                    input.value = parseInt(input.value) - 1;
+                    actualizarConsumo(input.closest('tr'));
+                }
+            });
+        });
+        
+        document.querySelectorAll('.incrementarCantidad').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                let input = this.previousElementSibling;
+                input.value = parseInt(input.value) + 1;
+                actualizarConsumo(input.closest('tr'));
+            });
+        });
+        
+        // Botones de horas
+        document.querySelectorAll('.decrementarHoras').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                let input = this.nextElementSibling;
+                if (input.value > 0) {
+                    input.value = parseInt(input.value) - 1;
+                    actualizarConsumo(input.closest('tr'));
+                }
+            });
+        });
+        
+        document.querySelectorAll('.incrementarHoras').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                let input = this.previousElementSibling;
+                if (parseInt(input.value) < 24) {
+                    input.value = parseInt(input.value) + 1;
+                    actualizarConsumo(input.closest('tr'));
+                }
+            });
+        });
+        
+        // Botones de eliminar
+        document.querySelectorAll('.eliminarFila').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                if (document.querySelectorAll('#equiposTableBody tr').length > 1) {
+                    this.closest('tr').remove();
+                    calcularConsumoTotal();
+                } else {
+                    alert('Debe mantener al menos un equipo en la lista');
+                }
+            });
+        });
+        
+        // Input de cantidad y horas con cambio manual
+        document.querySelectorAll('.cantidad, .horas').forEach(function(input) {
+            input.addEventListener('change', function() {
+                if (this.value < 0) this.value = 0;
+                if (this.classList.contains('horas') && this.value > 24) this.value = 24;
+                actualizarConsumo(this.closest('tr'));
+            });
+        });
+    }
+    
+    function actualizarConsumo(fila) {
+        const cantidad = parseInt(fila.querySelector('.cantidad').value);
+        const consumoUnitario = parseInt(fila.querySelector('.cantidad').dataset.consumo);
+        const horas = parseInt(fila.querySelector('.horas').value);
+        
+        const consumoTotal = cantidad * consumoUnitario * horas;
+        fila.querySelector('.consumo').textContent = consumoTotal + ' Wh/día';
+        
+        calcularConsumoTotal();
+    }
+    
+    function calcularConsumoTotal() {
+        let total = 0;
+        document.querySelectorAll('#equiposTableBody tr').forEach(function(fila) {
+            const consumoText = fila.querySelector('.consumo').textContent;
+            const consumo = parseInt(consumoText);
+            total += isNaN(consumo) ? 0 : consumo;
+        });
+        
+        document.getElementById('consumoTotal').textContent = total;
+    }
+    
+    function agregarNuevoEquipo() {
+        const equipos = [
+            { nombre: "Tablet Educativa", consumo: 10 },
+            { nombre: "Ventilador de Aula", consumo: 60 },
+            { nombre: "Router WiFi", consumo: 10 },
+            { nombre: "Cañón Proyector", consumo: 300 },
+            { nombre: "Nevera Pequeña", consumo: 150 },
+            { nombre: "Microondas Sala Profesores", consumo: 800 },
+            { nombre: "Pantalla Digital", consumo: 100 },
+            { nombre: "Ordenador Portátil", consumo: 65 },
+            { nombre: "Smartwatch Educativo", consumo: 5 },
+            { nombre: "Equipo de Laboratorio", consumo: 200 },
+            { nombre: "Servidor del Centro", consumo: 400 },
+            { nombre: "Consola de Videojuegos Educativa", consumo: 150 },
+            { nombre: "Cámara de Seguridad", consumo: 15 },
+            { nombre: "Altavoz Bluetooth", consumo: 20 },
+            { nombre: "Impresora 3D", consumo: 250 }
+        ];
+        
+        const equipoRandom = equipos[Math.floor(Math.random() * equipos.length)];
+        const tbody = document.getElementById('equiposTableBody');
+        const newRow = document.createElement('tr');
+        newRow.id = 'item-' + (tbody.children.length + 1);
+        
+        newRow.innerHTML = `
+            <td class="align-middle">${equipoRandom.nombre}</td>
+            <td class="align-middle">
+                <div class="input-group mx-auto">
+                    <button class="btn btn-orange btn-sm decrementarCantidad" type="button">−</button>
+                    <input type="number" class="form-control form-control-sm text-center cantidad" value="1" min="0" data-consumo="${equipoRandom.consumo}">
+                    <button class="btn btn-orange btn-sm incrementarCantidad" type="button">+</button>
+                </div>
+            </td>
+            <td class="align-middle">
+                <div class="input-group mx-auto">
+                    <button class="btn btn-orange btn-sm decrementarHoras" type="button">−</button>
+                    <input type="number" class="form-control form-control-sm text-center horas" value="4" min="0" max="24">
+                    <button class="btn btn-orange btn-sm incrementarHoras" type="button">+</button>
+                </div>
+            </td>
+            <td class="align-middle text-center consumo">${equipoRandom.consumo * 4} Wh/día</td>
+            <td class="align-middle text-center">
+                <button class="btn btn-delete eliminarFila">
+                    <i class="bi bi-trash">🗑️</i>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(newRow);
+        
+        // Agregar event listeners al nuevo equipo
+        const buttons = newRow.querySelectorAll('button');
+        const inputs = newRow.querySelectorAll('input');
+        
+        buttons[0].addEventListener('click', function() {
+            if (inputs[0].value > 0) {
+                inputs[0].value = parseInt(inputs[0].value) - 1;
+                actualizarConsumo(newRow);
+            }
+        });
+        
+        buttons[1].addEventListener('click', function() {
+            inputs[0].value = parseInt(inputs[0].value) + 1;
+            actualizarConsumo(newRow);
+        });
+        
+        buttons[2].addEventListener('click', function() {
+            if (inputs[1].value > 0) {
+                inputs[1].value = parseInt(inputs[1].value) - 1;
+                actualizarConsumo(newRow);
+            }
+        });
+        
+        buttons[3].addEventListener('click', function() {
+            if (parseInt(inputs[1].value) < 24) {
+                inputs[1].value = parseInt(inputs[1].value) + 1;
+                actualizarConsumo(newRow);
+            }
+        });
+        
+        buttons[4].addEventListener('click', function() {
+            if (document.querySelectorAll('#equiposTableBody tr').length > 1) {
+                newRow.remove();
+                calcularConsumoTotal();
+            } else {
+                alert('Debe mantener al menos un equipo en la lista');
+            }
+        });
+        
+        inputs.forEach(function(input) {
+            input.addEventListener('change', function() {
+                if (this.value < 0) this.value = 0;
+                if (this.classList.contains('horas') && this.value > 24) this.value = 24;
+                actualizarConsumo(newRow);
+            });
+        });
+        
+        calcularConsumoTotal();
+        
+        // Hacer scroll hasta el nuevo elemento añadido
+        newRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+</script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INDICACIONES</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    :root {
+      --unach-blue: #1d3557;
+      --unach-red: #e63946;
+      --unach-light-blue: #457b9d;
+      --unach-light: #f1faee;
+    }
+    
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+    
+    .left-panel {
+    width: 40%;
+    color: white;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Necesario para posicionar el pseudo-elemento */
+    /* Gradiente como fondo principal */
+    background: linear-gradient(135deg, #1d3557 0%, #0052b3 50%, #1d3557 100%);
+}
+
+.left-panel::before {
+    content: '';
+    background: url('images/fondo5.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.5; /* Opacidad SOLO para la imagen (0.5 = 50%) */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0; /* Coloca detrás del contenido */
+}
+
+/* Asegura que el contenido esté por encima de la imagen */
+.left-panel > * {
+    position: relative;
+    z-index: 1;
+}
+    
+    .logo {
+      margin-bottom: 0px;
+    }
+    
+    .logo img {
+      height: 100%;
+    }
+    
+    .title {
+      font-size: 70px;
+      font-weight: bold;
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-align: left;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.2);
+      margin-top: auto;
+      border-radius: 3px;
+      position: relative;
+    }
+    
+    .progress {
+      width: 25%;
+      height: 100%;
+      background-color: var(--unach-red);
+      border-radius: 3px;
+    }
+    
+    .step {
+      font-size: 14px;
+      color: var(--unach-red);
+      margin-top: 10px;
+    }
+    
+    .map-section {
+      flex: 1;
+      position: relative;
+    }
+    
+    .map {
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/800/600') no-repeat center;
+      background-size: cover;
+    }
+    
+    .search-container {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 600px;
+      z-index: 10;
+    }
+    
+    .search-box {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .search-box input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    
+    .search-icon {
+      padding: 15px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .map-toggle {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    
+    .toggle-btn {
+      padding: 8px 25px;
+      background: white;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    .toggle-btn.active {
+      background: var(--unach-blue);
+      color: white;
+    }
+    
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: 140px;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      max-width: 450px;
+      text-align: center;
+    }
+    
+    .bottom-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 100px;
+    }
+    
+    .btn {
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    
+    .btn-back {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+    }
+    
+    .btn-next {
+      background: var(--unach-red);
+      color: white;
+    }
+    
+    .zoom-controls {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .zoom-btn {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+
+    .top-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto; /* Mantiene proporción */
+    display: block;
+}
+
+    .header-image {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    height: auto; /* Mantiene la proporción */
+    margin: 0; /* Elimina cualquier margen */
+    display: block; /* Elimina espacio inferior de imágenes inline */
+    position: absolute; /* Opcional: si quieres posicionamiento absoluto */
+    top: 0; /* Lo coloca en el top */
+    left: 0;
+}
+
+.panel-content {
+    flex: 1; /* Ocupa todo el espacio disponible */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrado vertical */
+    align-items: center; /* Centrado horizontal (opcional) */
+    text-align: left; /* Alineación del texto */
+    padding: 20px; /* Ajusta según necesites */
+}
+
+.contenido-right{
+      padding: 100px;
+      
+    }
+
+
+
+    .custom-numbered-list {
+    counter-reset: item;
+    padding-left: 1.5em;
+    line-height: 1.6;
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.custom-numbered-list li {
+    margin-bottom: 0.8em;
+    list-style-type: none;
+    position: relative;
+}
+
+.custom-numbered-list li:before {
+    content: counter(item) ". ";
+    counter-increment: item;
+    position: absolute;
+    left: -1.5em;
+    font-weight: bold;
+    color: #0052b3;
+}
+
+
+  </style>
+  
+</head>
+<body>
+  <div class="left-panel">
+    
+
+    <img class="top-image" src="images/logo_blanco.png">
+    <div class="panel-content">
+        <br>
+        <br>
+        <br>
+
+        <h1 class="title">Indicaciones Generales</h1>
+    
+        <p class="subtitle">Lee atentamente las instrucciones para el uso correcto del programa.</p>
+      
+    </div>
+
+   
+  </div>
+  
+  <div class="map-section">
+   
+    <div class="contenido-right" >
+
+        <b><h1 style="color: #0052b3;" > Solo necesitas brindarnos la siguiente información:</h1></b>
+        <br>
+        <ol class="custom-numbered-list">
+            <li><strong>Datos Geográficos:</strong> Latitud/Longitud (para radiación solar y viento).</li>
+            <li><strong>Consumo Energético del Centro Educativo: </strong> Carga diaria de energía (kWh/día).</li>
+            <li><strong>Parámetros Económicos:</strong> Presupuesto disponible.</li>
+            
+        </ol>
+
+        <br>
+        <br>
+        <h5>¡No te preocupes si la información entregada no es completamente exacta!</h5>
+        <br>
+        <h5  style="text-align: justify;">Completando el simulador, podrás obtener un resultado inicial y 
+            una estimación del energética con el presupuesto asignado </h5>
+    </div>
+
+    
+    <div class="bottom-controls">
+      <div onclick="location.href = '/'" class="btn btn-back">Atrás</div>
+      <div onclick="location.href = 'gps'" class="btn btn-danger">Siguiente</div>
+    </div>
+    
+  
+  </div>
+</body>
+</html>
