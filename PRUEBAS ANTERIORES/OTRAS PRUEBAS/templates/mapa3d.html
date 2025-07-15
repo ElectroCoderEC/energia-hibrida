@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa 3D con Marcadores</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { 
+            width: 100vw;
+            height: 100vh;
+        }
+        .map-controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .popup-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .popup-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+        #resetBtn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .mapboxgl-ctrl-geocoder {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="map-controls">
+        <input type="text" id="searchInput" placeholder="Buscar ubicación...">
+        <button id="resetBtn" onclick="resetMap()" style="display: none;">Reiniciar Mapa</button>
+    </div>
+
+    <script>
+        // Configuración inicial
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Vub2JyYWtlciIsImEiOiJjbGMwcmtiY3UxYWFuM3VtbnpnZzUxZXd2In0.YIJXm-GRJerA6l0pTR7LRw';
+        let map;
+        let installationMarker = null;
+
+        // Inicializar mapa
+        function initMap() {
+            map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/navigation-day-v1',
+                center: [-74.5, 40], // Coordenadas iniciales (NYC)
+                zoom: 15,
+                pitch: 45,
+                bearing: -17.6,
+                antialias: true
+            });
+
+            // Añadir controles
+            map.addControl(new mapboxgl.Geocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl,
+                marker: false
+            }), 'top-left');
+
+            // Cargar características 3D
+            map.on('load', () => {
+                map.addTerrain({
+                    source: 'mapbox-dem',
+                    exaggeration: 1.5
+                });
+
+                map.addLayer({
+                    id: '3d-buildings',
+                    source: 'composite',
+                    'source-layer': 'building',
+                    filter: ['==', 'extrude', 'true'],
+                    type: 'fill-extrusion',
+                    minzoom: 15,
+                    paint: {
+                        'fill-extrusion-color': '#ddd',
+                        'fill-extrusion-height': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'height']
+                        ],
+                        'fill-extrusion-base': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            15,
+                            0,
+                            15.05,
+                            ['get', 'min_height']
+                        ],
+                        'fill-extrusion-opacity': 0.6
+                    }
+                });
+            });
+
+            // Manejar clics en el mapa
+            map.on('click', (e) => {
+                if (!installationMarker) {
+                    handleFirstClick(e.lngLat.lng, e.lngLat.lat);
+                }
+            });
+        }
+
+        // Función para colocar marcador
+        function handleFirstClick(lng, lat, placeName = 'Ubicación seleccionada') {
+            const popupContent = `
+                <div class="popup-container">
+                    <div class="popup-title">LUGAR DE INSTALACIÓN</div>
+                    <div class="popup-description">${placeName}</div>
+                </div>
+            `;
+
+            installationMarker = new mapboxgl.Marker({ color: 'red' })
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup().setHTML(popupContent))
+                .addTo(map)
+                .togglePopup();
+
+            document.getElementById('resetBtn').style.display = 'inline';
+            map.getCanvas().style.cursor = 'crosshair';
+        }
+
+        // Función para reiniciar
+        function resetMap() {
+            if (installationMarker) {
+                installationMarker.remove();
+                installationMarker = null;
+            }
+            document.getElementById('resetBtn').style.display = 'none';
+            map.flyTo({
+                center: [-74.5, 40],
+                zoom: 15,
+                pitch: 45,
+                bearing: -17.6
+            });
+        }
+
+        // Inicializar al cargar la página
+        window.onload = initMap;
+    </script>
+</body>
+</html>

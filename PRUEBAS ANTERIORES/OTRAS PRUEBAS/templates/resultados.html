@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESULTADOS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --purple-dark: #1d3557;
+            --purple-light: #0052b3;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        body::before {
+  content: "";
+  position: absolute;
+  top: 50;
+  left: 50;
+  width: 100%;
+  height: 100%;
+  background: url("images/fondo4.png")
+    no-repeat center;
+  background-size: cover;
+
+      z-index: -1;
+  opacity: 0.3; /* Fondo desenfocado */
+
+}
+        
+      
+        
+        .content-container {
+            position: relative;
+            z-index: 1;
+            color: black;
+            padding: 40px 0;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .description {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        
+        .edit-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #1d3557;
+            color: white;
+            border: 1px solid white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .edit-btn:hover {
+            background-color: #0052b3;
+            color: white;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+           
+        }
+        
+        .card-title {
+            color: var(--purple-dark);
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 20px;
+            
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-icon {
+            color: var(--purple-light);
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .info-value {
+            color: var(--purple-dark);
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .notice {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            margin: 20px 0;
+        }
+        
+        .form-section h2 {
+            color: var(--purple-dark);
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        
+        .radio-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .radio-button {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .radio-button input {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .radio-button input:checked + .radio-label {
+            background-color: #f0e6ff;
+        }
+        
+        .radio-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--purple-dark);
+            margin-right: 10px;
+            position: relative;
+        }
+        
+        .radio-button input:checked + .radio-label .radio-circle:after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--purple-dark);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .btn-purple {
+            background-color: var(--purple-dark);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-purple:hover {
+            background-color: var(--purple-light);
+            color: white;
+        }
+
+        .top-image {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: auto; /* Mantiene proporción */
+    display: block;
+}
+
+.separator {
+  border: 0;
+  height: 3px;
+  background-color: #ccc;
+  margin: 0 5px;
+}
+
+
+/* Estilos para el loader */
+#loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 1.5s ease-out;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Estilos para el contenido con efecto fade-in */
+    #content {
+      opacity: 0;
+      transition: opacity 0.8s ease-in;
+    }
+    
+    /* Clase que se añadirá cuando el contenido deba mostrarse */
+    .fade-in {
+      opacity: 1 !important;
+    }
+
+    </style>
+</head>
+<body>
+
+
+   <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+
+   <!-- Contenido de tu página -->
+   <div id="content" >
+    <div class="bg-overlay">
+        <div class="content-container container">
+            <div class="row">
+                <div class="col-md-7">
+                    <img class="top-image" src="images/logo_mejor.png" >
+                    <h1>Solución a medida con Machine Learning</h1>
+                    <p class="description" style="text-align: justify;">
+                        El sistema se adapta a cualquier entorno con las necesidades energéticas que requiere cualquier centro educativo que desee un cambio positivo en el medio ambiente. A continuación se presentan los detalles calculados por un agente de IA.
+                    </p>
+                    <a  href="presupuesto.html" class="edit-btn">EDITAR LA SIMULACIÓN &gt;</a>
+                </div>
+                <div class="col-md-5">
+                    <div class="card">
+                        <h1 class="card-title">Resumen del Sistema Híbrido Calculado</h1>
+                        
+                        <!-- Sección Energía Fotovoltaica -->
+                        <div class="col-md-12 d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                              <img src="images/ic_solar.png" alt="Icono Solar" style="width: 40px; height: 40px; margin-right: 15px; margin-bottom: 10px;">
+                              <h5 class="m-0 text-white" style="border-radius: 25px; background-color: var(--purple-dark); padding: 10px;"><i>Energía Fotovoltaica</i></h5>
+                            
+                            </div>
+                          </div>
+                          <hr style="border-color:black;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-sun"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">129 kWp</p>
+                                        <p class="info-label">Potencia de la planta</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">221.26 $ / año</p>
+                                        <p class="info-label">Ahorro</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">52.304 KWh / año</p>
+                                        <p class="info-label">Energía producida</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">51 ton / año</p>
+                                        <p class="info-label">CO2 evitado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                       
+                        <div class="col-md-12 d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                              <img src="images/ic_turbina.png" alt="Icono turbina" style="width: 40px; height: 40px; margin-right: 15px; margin-bottom: 10px;">
+                              <h5 class="m-0 text-white" style="border-radius: 25px; background-color: var(--purple-dark); padding: 10px;"><i>Energía Eólica</i></h5>
+                             
+                            </div>
+                          </div>
+                          <hr style="border-color:black;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-sun"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">53 kWp</p>
+                                        <p class="info-label">Potencia de la planta</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">391.75 $ / año</p>
+                                        <p class="info-label">Ahorro</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                      
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">20.304 KWh / año</p>
+                                        <p class="info-label">Energía producida</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex">
+                                    <div class="info-icon">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div>
+                                        <p class="info-value">36 ton / año</p>
+                                        <p class="info-label">CO2 evitado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+    
+                        
+                        <div class="form-section">
+                           
+                            
+                           
+                        </div>
+                        <button class="btn btn-danger">VER DETALLES</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+   window.addEventListener('load', function() {
+      // Primero ocultamos el loader con fade out
+      const loader = document.getElementById('loader');
+      loader.style.opacity = '0';
+      
+      // Cuando termine la transición del loader, lo ocultamos completamente
+      loader.addEventListener('transitionend', function() {
+        loader.style.display = 'none';
+        
+        // Activamos el fade in del contenido
+        document.getElementById('content').classList.add('fade-in');
+      });
+    });
+</script>
+</body>
+</html>

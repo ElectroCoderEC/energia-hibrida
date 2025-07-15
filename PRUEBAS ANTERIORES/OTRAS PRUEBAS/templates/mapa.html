@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Energía Híbrido - UNACH</title>
+    
+    <!-- Mapbox CSS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    
+    <style>
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        
+        .controls-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .map-toggle {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .map-toggle.active {
+            background-color: #1a365d;
+            color: white;
+        }
+        
+        .search-box {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        
+        .form-container {
+            position: relative;
+            z-index: 1;
+            /* Resto de tu estilo para el contenedor del formulario */
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor para el mapa -->
+    <div id="map"></div>
+    
+    <!-- Tu formulario y resto del contenido -->
+    <div class="form-container">
+        <!-- Contenido de tu formulario -->
+    </div>
+    
+    <!-- Controles del mapa -->
+    <div class="controls-container">
+        <button id="satellite-btn" class="map-toggle active">Satélite</button>
+        <button id="map-btn" class="map-toggle">Mapa</button>
+    </div>
+    
+    <!-- Caja de búsqueda -->
+    <div class="search-box">
+        <input type="text" id="address-input" class="search-input" placeholder="Inserta la dirección o selecciónala en el mapa">
+    </div>
+    
+    <!-- Mapbox JS -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <script>
+        // Reemplaza con tu token de acceso de Mapbox
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Vub2JyYWtlciIsImEiOiJjbGMwcmtiY3UxYWFuM3VtbnpnZzUxZXd2In0.YIJXm-GRJerA6l0pTR7LRw';
+        
+        // Inicializa el mapa
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-v9', // Estilo de satélite por defecto
+            center: [-78.6483, -1.6741], // Coordenadas aproximadas de Ecuador
+            zoom: 9
+        });
+        
+        // Añade controles de navegación
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Añade un marcador que se puede arrastrar
+        const marker = new mapboxgl.Marker({
+            draggable: true
+        })
+        .setLngLat([-78.6483, -1.6741])
+        .addTo(map);
+        
+       
+    </script>
+</body>
+</html>

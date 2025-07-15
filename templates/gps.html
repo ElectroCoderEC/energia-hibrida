@@ -10,6 +10,15 @@
 
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+
+
   <title>GEOLOCALIZACIÓN</title>
   <style>
     * {
@@ -385,6 +394,104 @@ let lineLayerId = 'line-layer';
        });
 
 
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              position => {
+                  const lng = position.coords.longitude;
+                  const lat = position.coords.latitude;
+                  const accuracy = position.coords.accuracy; // en metros
+
+                  console.log(`Posición obtenida: Lat ${lat}, Lng ${lng}, Precisión ${accuracy} m`);
+
+                   // Intentar obtener altitud del GPS (puede ser null)
+            var  gpsAltitude = position.coords.altitude;
+            const altitudeAccuracy = position.coords.altitudeAccuracy;
+
+
+            if (gpsAltitude !== null) {
+                console.log(`Altitud GPS: ${gpsAltitude} m, Precisión altitud: ${altitudeAccuracy} m`);
+            }
+
+                  // Centrar el mapa en tu posición
+                  map.setCenter([lng, lat]);
+                  map.setZoom(16); // zoom más alto para mayor detalle
+
+
+
+$.ajax({
+    url: 'https://api.open-elevation.com/api/v1/lookup',
+    method: 'GET',
+    data: { locations: `${lat},${lng}` },
+    success: function(data) {
+        console.log("Elevación:", data);
+        const elevation = data.results[0].elevation;
+        gpsAltitude = elevation;
+        handleFirstClick(lng, lat, `Lat: ${lat}, Lng: ${lng}, Elev: ${elevation} m`);
+
+
+            
+              $.ajax({
+                  url: '/get_coordenadas',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({ lat: lat, lng: lng, altitud: gpsAltitude}),
+                  success: function (response) {
+
+
+                  },
+                  error: function (xhr, status, error) {
+                      Swal.fire(
+                          'Error',
+                          'Hubo un problema al solicitar la información',
+                          'error'
+                      );
+                  }
+              });
+
+
+
+    },
+    error: function(xhr, status, error) {
+        console.error("Error en elevación:", error);
+        Swal.fire('Error', 'No se pudo obtener la altitud', 'error');
+    }
+});
+
+
+            
+
+            // Agregar marcador
+                  new mapboxgl.Marker()
+                      .setLngLat([lng, lat])
+                      .setPopup(new mapboxgl.Popup().setText(`¡Estás aquí! Precisión: ${Math.round(accuracy)} m`))
+                      .addTo(map);
+                           
+              // Luego consultas la altitud usando Open-Elevation
+        
+         
+     
+
+              
+              
+              },
+              error => {
+                  console.error("No se pudo obtener tu ubicación:", error.message);
+                  alert("No se pudo obtener tu ubicación. Asegúrate de permitir el acceso a la ubicación.");
+              },
+              {
+                  enableHighAccuracy: true,
+                  timeout: 10000,
+                  maximumAge: 0
+              }
+              
+          );
+      } else {
+          console.error("Geolocalización no es soportada por este navegador.");
+          alert("Tu navegador no soporta geolocalización.");
+      }
+
+
+
       let installationMarker = null;
       let cornerPoints = [];
       let cornerMarkers = [];
@@ -481,6 +588,8 @@ let lineLayerId = 'line-layer';
 });
 
 
+var areaTerreno = 0;
+
         // Botón de reset
         document.getElementById('resetBtn').addEventListener('click', () => {
             if (installationMarker) {
@@ -553,6 +662,35 @@ if (map.getSource(lineSourceId)) map.removeSource(lineSourceId);
         ? `${perimeter.toFixed(2)} km`
         : `${(perimeter * 1000).toFixed(2)} m`;
 
+
+        areaTerreno = area;
+
+
+        $.ajax({
+                  url: '/get_area',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({area: areaTerreno}),
+                  success: function (response) {
+                  
+
+                    if(response){
+
+                    //  alert("area terreno: " +response.terreno)
+                    }
+
+                  },
+                  error: function (xhr, status, error) {
+                      Swal.fire(
+                          'Error',
+                          'Hubo un problema al solicitar la información',
+                          'error'
+                      );
+                  }
+              });
+
+
+
     // Agrega la fuente y capa al mapa
     map.addSource(polygonLayerId, {
         type: 'geojson',
@@ -579,6 +717,71 @@ if (map.getSource(lineSourceId)) map.removeSource(lineSourceId);
 }
 
 
+async function processQuery(query) {
+    // Detecta si son coordenadas: ej " -0.1807, -78.4678 "
+    const coordPattern = /^\s*(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)\s*$/;
+    const match = query.match(coordPattern);
+
+    if (match) {
+        const lat = parseFloat(match[1]);
+        const lng = parseFloat(match[3]);
+        var elevationFinal = 0;
+
+
+        $.ajax({
+    url: 'https://api.open-elevation.com/api/v1/lookup',
+    method: 'GET',
+    data: { locations: `${lat},${lng}` },
+    success: function(data) {
+        console.log("Elevación:", data);
+        
+        gpsAltitude = data.results[0].elevation;
+
+
+            
+              $.ajax({
+                  url: '/get_coordenadas',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({ lat: lat, lng: lng, altitud: gpsAltitude}),
+                  success: function (response) {
+
+
+                  },
+                  error: function (xhr, status, error) {
+                      Swal.fire(
+                          'Error',
+                          'Hubo un problema al solicitar la información',
+                          'error'
+                      );
+                  }
+              });
+
+
+              
+    },
+    error: function(xhr, status, error) {
+        console.error("Error en elevación:", error);
+        Swal.fire('Error', 'No se pudo obtener la altitud', 'error');
+    }
+});
+
+
+
+
+
+          
+
+            
+          
+        // Centra el mapa en estas coordenadas
+        handleFirstClick(lng, lat, `Lat: ${lat}, Lng: ${lng}`);
+        map.flyTo({ center: [lng, lat], zoom: 16 });
+    } else {
+        // Si no son coordenadas, busca como dirección
+        searchAddress(query);
+    }
+}
 
 
 async function searchAddress(query) {
@@ -598,6 +801,9 @@ async function searchAddress(query) {
 
 
 
+
+
+
 function handleFirstClick(lng, lat, placeName = 'LUGAR DE INSTALACIÓN') {
     if (!installationMarker) {
         document.getElementById('tooltip').style.display = 'none';
@@ -614,19 +820,60 @@ function handleFirstClick(lng, lat, placeName = 'LUGAR DE INSTALACIÓN') {
 
         // Mostrar en el input del buscador
         document.querySelector('.search-box input').value = placeName;
+
+
+            $.ajax({
+    url: 'https://api.open-elevation.com/api/v1/lookup',
+    method: 'GET',
+    data: { locations: `${lat},${lng}` },
+    success: function(data) {
+        console.log("Elevación:", data);
+        
+        gpsAltitude = data.results[0].elevation;
+
+
+            
+              $.ajax({
+                  url: '/get_coordenadas',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({ lat: lat, lng: lng, altitud: gpsAltitude}),
+                  success: function (response) {
+
+
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire(
+                                    'Error',
+                                    'Hubo un problema al solicitar la información',
+                                    'error'
+                                );
+                            }
+                        });
+
+
+                        
+              },
+              error: function(xhr, status, error) {
+                  console.error("Error en elevación:", error);
+                  Swal.fire('Error', 'No se pudo obtener la altitud', 'error');
+              }
+            });
+
     }
 }
-
 
 
 document.querySelector('.search-box input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         const query = e.target.value.trim();
         if (query) {
-            searchAddress(query);
+            processQuery(query);
         }
     }
 });
+
+
 
 
 
@@ -638,6 +885,8 @@ function updateLineBetweenCorners() {
       // Si ya hay 4 puntos, cerramos la línea conectando el último con el primero
       if (coords.length === 4) {
         coords.push(coords[0]);
+
+
     }
 
     const lineData = turf.lineString(coords);
@@ -665,6 +914,17 @@ function updateLineBetweenCorners() {
    </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 
 </body>
 </html>
