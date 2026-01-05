@@ -1,3 +1,6 @@
+import os
+
+'''
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
 import json
@@ -25,6 +28,8 @@ import tempfile
 import os
 import threading
 from pathlib import Path
+'''
+
 
 
 # app = Flask(__name__)
@@ -1119,32 +1124,27 @@ def get_coordenadas():
 
 @app.route("/get_resumen", methods=["POST"])
 def get_resumen():
-
-    global strlatitud, strlongitud, strlatitud, altitud, areaTerreno, areaTecho, numEstudiantes, consumoDiario, consumoMensual
-
+    global strlatitud, strlongitud, altitud, areaTerreno, areaTecho, numEstudiantes, consumoDiario, consumoMensual
+    
     datos = request.get_json()
 
     print("Enviando variables resumen")
+    
+    return jsonify({
+        "lat": strlatitud,
+        "lng": strlongitud,
+        "altitud": altitud,
+        "terreno": areaTerreno,
+        "techo": areaTecho,
+        "estudiantes": numEstudiantes,
+        "diario": consumoDiario,
+        "mensual": consumoMensual,
+    })
+     
 
-    variables = jsonify(
-        {
-            "lat": strlatitud,
-            "lng": strlongitud,
-            "altitud": altitud,
-            "terreno": areaTerreno,
-            "techo": areaTecho,
-            "estudiantes": numEstudiantes,
-            "diario": consumoDiario,
-            "mensual": consumoMensual,
-        }
-    )
-    print(str(variables))
-    print(strlatitud)
-    print(strlongitud)
-
-    return variables
-
+    #print(str(variables))
+    
 
 if __name__ == "__main__":
-
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    socketio.run(app, host="0.0.0.0", port=port, debug=False)
