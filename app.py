@@ -59,7 +59,7 @@ app = Flask(
 )
 
 
-socketio = SocketIO(app)
+#socketio = SocketIO(app)
 
 
 strlatitud = "0"
@@ -986,7 +986,7 @@ def get_resumen():
     #print(str(variables))
     
 
+# DESPUÉS:
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    debug_mode = not IS_PRODUCTION
-    socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode)
+    app.run(host='0.0.0.0', port=port, debug=False)
