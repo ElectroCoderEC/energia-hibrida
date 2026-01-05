@@ -1,4 +1,21 @@
+# Al inicio del archivo, después de los imports básicos, agrega:
 import os
+
+# Detectar si estamos en producción
+IS_PRODUCTION = os.environ.get('RENDER') is not None or os.environ.get('PORT') is not None
+
+if not IS_PRODUCTION:
+    try:
+        import pygame
+        import pyttsx3
+        AUDIO_AVAILABLE = True
+    except ImportError:
+        AUDIO_AVAILABLE = False
+        print("⚠️ Audio libraries not available")
+else:
+    AUDIO_AVAILABLE = False
+    print("🌐 Running in production mode - Audio disabled")
+
 
 '''
 from flask import Flask, render_template, jsonify, request
@@ -60,228 +77,53 @@ presupuestoEolico = 0
 EXCEL_FILE = "calculadora_consumos.xlsx"
 
 
+# Reemplazar la clase TextToSpeechEngine con esta versión:
 class TextToSpeechEngine:
     def __init__(self):
-        """Inicializa el motor de texto a voz y pygame"""
-        pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
-        self.engine = pyttsx3.init()
-        self.temp_files = []
-        self.setup_voice_settings()
+        """Inicializa el motor de texto a voz (solo en desarrollo)"""
+        if AUDIO_AVAILABLE:
+            pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
+            self.engine = pyttsx3.init()
+            self.temp_files = []
+            self.setup_voice_settings()
+        else:
+            self.engine = None
+            self.temp_files = []
+            print("ℹ️ Audio engine disabled in production")
 
     def setup_voice_settings(self):
         """Configura los ajustes básicos de voz"""
-        # Velocidad de habla (palabras por minuto)
+        if not AUDIO_AVAILABLE or not self.engine:
+            return
+        
         self.engine.setProperty("rate", 150)
-
-        # Volumen (0.0 a 1.0)
         self.engine.setProperty("volume", 0.9)
-
-        # Obtener voces disponibles
         voices = self.engine.getProperty("voices")
         if voices:
-            # Por defecto usar la primera voz
             self.engine.setProperty("voice", voices[0].id)
 
-    def get_available_voices(self):
-        """Retorna lista de voces disponibles en el sistema"""
-        voices = self.engine.getProperty("voices")
-        voice_list = []
-
-        if voices:
-            for i, voice in enumerate(voices):
-                voice_info = {
-                    "id": i,
-                    "name": voice.name,
-                    "languages": getattr(voice, "languages", ["unknown"]),
-                    "gender": getattr(voice, "gender", "unknown"),
-                }
-                voice_list.append(voice_info)
-
-        return voice_list
-
-    def set_voice(self, voice_index):
-        """Cambia la voz usando el índice de la lista de voces"""
-        voices = self.engine.getProperty("voices")
-        if voices and 0 <= voice_index < len(voices):
-            self.engine.setProperty("voice", voices[voice_index].id)
-            return True
-        return False
-
-    def set_voice_properties(self, rate=None, volume=None):
-        """Ajusta propiedades de la voz"""
-        if rate is not None:
-            self.engine.setProperty("rate", rate)
-        if volume is not None:
-            self.engine.setProperty("volume", min(1.0, max(0.0, volume)))
-
-    def text_to_audio_file(self, text, filename=None):
-        """Convierte texto a archivo de audio"""
-        if filename is None:
-            # Crear archivo temporal
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
-            filename = temp_file.name
-            temp_file.close()
-            self.temp_files.append(filename)
-
-        # Guardar audio
-        self.engine.save_to_file(text, filename)
-        self.engine.runAndWait()
-
-        return filename
-
-    def play_text(self, text, save_file=False, filename=None):
-        """Convierte texto a voz y lo reproduce con pygame"""
-        try:
-            # Crear archivo de audio
-            audio_file = self.text_to_audio_file(text, filename if save_file else None)
-
-            # Cargar y reproducir con pygame
-            pygame.mixer.music.load(audio_file)
-            pygame.mixer.music.play()
-
-            # Esperar a que termine la reproducción
-            while pygame.mixer.music.get_busy():
-                pygame.time.wait(100)
-
-            # Limpiar archivo temporal si no se quiere guardar
-            if not save_file and audio_file in self.temp_files:
-                try:
-                    os.remove(audio_file)
-                    self.temp_files.remove(audio_file)
-                except:
-                    pass
-
-            return True
-
-        except Exception as e:
-            print(f"Error al reproducir texto: {e}")
-            return False
-
-    def play_text_async(self, text, callback=None):
-        """Reproduce texto de forma asíncrona"""
-
-        def play_thread():
-            success = self.play_text(text)
-            if callback:
-                callback(success)
-
-        thread = threading.Thread(target=play_thread)
-        thread.daemon = True
-        thread.start()
-        return thread
-
-    def stop_playback(self):
-        """Detiene la reproducción actual"""
-        pygame.mixer.music.stop()
-
-    def is_playing(self):
-        """Verifica si hay audio reproduciéndose"""
-        return pygame.mixer.music.get_busy()
-
     def load_and_play_audio(self, audio_file_path):
-        """Carga y reproduce un archivo de audio existente"""
+        """Carga y reproduce un archivo de audio (solo en desarrollo)"""
+        if not AUDIO_AVAILABLE:
+            print(f"ℹ️ Audio playback disabled: {audio_file_path}")
+            return False
+        
         try:
             if not os.path.exists(audio_file_path):
                 print(f"Error: El archivo {audio_file_path} no existe")
                 return False
 
-            # Verificar si es un formato compatible
-            supported_formats = [".wav", ".mp3", ".ogg", ".mid", ".midi"]
-            file_ext = Path(audio_file_path).suffix.lower()
-
-            if file_ext not in supported_formats:
-                print(f"Warning: El formato {file_ext} podría no ser compatible")
-
-            # Cargar y reproducir
             pygame.mixer.music.load(audio_file_path)
             pygame.mixer.music.play()
 
-            print(f"Reproduciendo: {os.path.basename(audio_file_path)}")
-
-            # Esperar a que termine la reproducción
             while pygame.mixer.music.get_busy():
                 pygame.time.wait(100)
 
             return True
 
-        except pygame.error as e:
-            print(f"Error de pygame al cargar {audio_file_path}: {e}")
-            return False
         except Exception as e:
             print(f"Error al reproducir archivo {audio_file_path}: {e}")
             return False
-
-    def load_and_play_audio_async(self, audio_file_path, callback=None):
-        """Reproduce archivo de audio de forma asíncrona"""
-
-        def play_thread():
-            success = self.load_and_play_audio(audio_file_path)
-            if callback:
-                callback(success, audio_file_path)
-
-        thread = threading.Thread(target=play_thread)
-        thread.daemon = True
-        thread.start()
-        return thread
-
-    def get_audio_info(self, audio_file_path):
-        """Obtiene información básica del archivo de audio"""
-        try:
-            if not os.path.exists(audio_file_path):
-                return None
-
-            file_stats = os.stat(audio_file_path)
-            file_info = {
-                "filename": os.path.basename(audio_file_path),
-                "path": audio_file_path,
-                "size_bytes": file_stats.st_size,
-                "size_mb": round(file_stats.st_size / (1024 * 1024), 2),
-                "format": Path(audio_file_path).suffix.lower(),
-                "created": file_stats.st_ctime,
-                "modified": file_stats.st_mtime,
-            }
-
-            return file_info
-
-        except Exception as e:
-            print(f"Error al obtener información del archivo: {e}")
-            return None
-
-    def play_audio_with_controls(self, audio_file_path, loop=False):
-        """Reproduce archivo con controles básicos (loop opcional)"""
-        try:
-            if not os.path.exists(audio_file_path):
-                print(f"Error: El archivo {audio_file_path} no existe")
-                return False
-
-            pygame.mixer.music.load(audio_file_path)
-
-            # -1 para loop infinito, 0 para una sola reproducción
-            loops = -1 if loop else 0
-            pygame.mixer.music.play(loops)
-
-            print(f"Reproduciendo: {os.path.basename(audio_file_path)}")
-            if loop:
-                print("Modo loop activado (Ctrl+C para detener)")
-
-            return True
-
-        except Exception as e:
-            print(f"Error al reproducir archivo: {e}")
-            return False
-
-    def set_volume(self, volume):
-        """Ajusta el volumen de pygame (0.0 a 1.0)"""
-        volume = min(1.0, max(0.0, volume))
-        pygame.mixer.music.set_volume(volume)
-
-    def pause_audio(self):
-        """Pausa la reproducción actual"""
-        pygame.mixer.music.pause()
-
-    def unpause_audio(self):
-        """Reanuda la reproducción pausada"""
-        pygame.mixer.music.unpause()
 
     def cleanup(self):
         """Limpia archivos temporales"""
@@ -296,7 +138,6 @@ class TextToSpeechEngine:
     def __del__(self):
         """Destructor para limpiar recursos"""
         self.cleanup()
-
 
 class ConsumosManager:
     def __init__(self):
@@ -1147,4 +988,5 @@ def get_resumen():
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    socketio.run(app, host="0.0.0.0", port=port, debug=False)
+    debug_mode = not IS_PRODUCTION
+    socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode)
