@@ -7,25 +7,12 @@ from flask import Flask, render_template, jsonify, request
 #from flask_socketio import SocketIO, emit
 import json
 from datetime import datetime
-import pygame
-import os
 from flask import Flask, render_template, request, redirect, session
 import random
 import calendar
-
 import joblib
 import pandas as pd
-import numpy as np
-
 import json
-
-
-import pygame
-import pyttsx3
-import tempfile
-import os
-import threading
-from pathlib import Path
 
 
 # Detectar si estamos en producción
