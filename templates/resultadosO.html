@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESULTADOS - Sistema Energético Escolar</title>
+    <title>RESULTADOS</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -150,7 +150,7 @@
             position: relative;
             top: 0;
             left: 0;
-            width: 40%;
+            width: 50%;
             height: auto;
             display: block;
         }
@@ -331,26 +331,6 @@
         .energy-title-container:hover .hover-text {
             display: block;
         }
-
-        .rural-context {
-            background: linear-gradient(135deg, #e8f4fd, #d1ecf1);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid var(--purple-light);
-        }
-
-        .rural-context h6 {
-            color: var(--purple-dark);
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .rural-context p {
-            color: #555;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -367,21 +347,15 @@
             <div class="row">
                 <div class="col-md-7">
                     <img class="top-image" src="images/logo_mejor.png">
-                    <h1>Solución Energética para Escuelas Rurales</h1>
+                    <h1>Solución a medida con Machine Learning</h1>
                     <p class="description" style="text-align: justify;">
-                        Sistema híbrido diseñado específicamente para escuelas rurales del cantón Riobamba, adaptado a las condiciones climáticas andinas y presupuestos educativos limitados. Solución sostenible y económica calculada por inteligencia artificial.
+                        El sistema se adapta a cualquier entorno con las necesidades energéticas que requiere cualquier centro educativo que desee un cambio positivo en el medio ambiente. A continuación se presentan los detalles calculados por un agente de IA.
                     </p>
-                    <div class="rural-context">
-                        <h6><i class="fas fa-map-marker-alt"></i> Contexto Rural - Riobamba</h6>
-                        <p><strong>Ubicación:</strong> Cantón Riobamba, Chimborazo (2,750 msnm)</p>
-                        <p><strong>Clima:</strong> Andino ecuatorial con buena irradiación solar</p>
-                        <p><strong>Tarifa eléctrica:</strong> $0.092 USD/kWh (residencial)</p>
-                    </div>
-                    <a onclick="location.href = 'instrucciones'" class="edit-btn">EDITAR LA SIMULACIÓN &gt;</a>
+                    <a  onclick="location.href = 'instrucciones'" class="edit-btn">EDITAR LA SIMULACIÓN &gt;</a>
                 </div>
                 <div class="col-md-5">
                     <div class="card">
-                        <h1 class="card-title">Sistema Híbrido Calculado</h1>
+                        <h1 class="card-title">Resumen del Sistema Híbrido Calculado</h1>
                         
                         <!-- Sección Energía Fotovoltaica -->
                         <div class="energy-section">
@@ -511,8 +485,31 @@
                             </div>
                         </div>
 
+                        <!-- Resumen total CO2 
+                        <div class="co2-highlight">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5><i class="fas fa-tree"></i> Impacto Ambiental Total</h5>
+                                    <p class="mb-0">CO2 evitado anualmente</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="co2-value" id="total-co2">0 ton</div>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+
+                        <!-- ROI Indicator 
+                        <div class="roi-indicator">
+                            <h5><i class="fas fa-chart-line"></i> Retorno de Inversión</h5>
+                            <div id="roi-years">Calculando...</div>
+                        </div>
+                        -->
                         <div class="d-grid gap-2">
                             <button class="btn btn-danger" onclick="mostrarDetallesCompletos()">VER DETALLES COMPLETOS</button>
+                         <!--    <button class="btn btn-equipos" onclick="mostrarTodosEquipos()">
+                                <i class="fas fa-list"></i> Ver Todos los Equipos-->
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -573,7 +570,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="fas fa-cogs"></i> Sistema Híbrido Completo - Análisis Detallado
+                    <i class="fas fa-cogs"></i> Sistema Híbrido Completo - Lista de Equipos
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -616,76 +613,72 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <script>
-
-    
-// Datos del sistema calculado realistas para escuelas rurales de Riobamba
-let sistemaCalculado1 = {
+// Datos del sistema calculado (estos vendrían del backend/ML)
+let sistemaCalculado = {
     solar: {
-        capacidad_kwp: 12.5,
-        energia_anual_kwh: 18750,
-        ahorro_anual_usd: 1725.00,
-        co2_evitado_ton: 7.3,
-        // Generación mensual ajustada al clima andino de Riobamba
-        generacion_mensual: [1200, 1350, 1600, 1750, 1850, 1950, 2000, 1950, 1800, 1650, 1400, 1245],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [19.2, 18.8, 18.5, 18.2, 17.8, 17.5, 17.2, 17.4, 17.8, 18.2, 18.6, 19.0],
+        capacidad_kwp: 129,
+        energia_anual_kwh: 22304,
+        ahorro_anual_usd: 10021.26,
+        co2_evitado_ton: 31,
+        generacion_mensual: [1800, 1950, 2200, 2350, 2600, 2800, 3200, 3100, 2700, 2400, 2000, 1700],
+        irradiacion_solar: [5.2, 5.5, 5.8, 6.1, 6.4, 6.7, 7.2, 6.9, 6.3, 5.9, 5.4, 5.0],
+        temperatura_ambiente: [22, 24, 26, 25, 24, 22, 21, 22, 23, 24, 25, 23],
+        horas_sol_promedio: [6.5, 7.0, 7.5, 8.0, 8.2, 8.5, 9.0, 8.8, 8.0, 7.5, 7.0, 6.5],
+        eficiencia_panel: [18.5, 18.2, 17.8, 17.5, 17.2, 16.8, 16.5, 16.7, 17.0, 17.5, 18.0, 18.3],
        
         equipos: [
             {
                 categoria: "Paneles Solares",
                 items: [
-                    { nombre: "Panel Monocristalino 400W", cantidad: 31, precio_unitario: 165, precio_total: 5115 },
-                    { nombre: "Estructura de Montaje Galvanizada", cantidad: 31, precio_unitario: 45, precio_total: 1395 }
+                    { nombre: "Panel Monocristalino 450W", cantidad: 87, precio_unitario: 180, precio_total: 51660 },
+                    { nombre: "Estructura de Montaje", cantidad: 129, precio_unitario: 150, precio_total: 19350 }
                 ]
             },
             {
                 categoria: "Equipos de Control",
                 items: [
-                    { nombre: "Inversor Híbrido 3kW", cantidad: 4, precio_unitario: 680, precio_total: 2720 },
-                    { nombre: "Controlador MPPT 40A", cantidad: 2, precio_unitario: 185, precio_total: 370 }
+                    { nombre: "Inversor Híbrido 5kW", cantidad: 26, precio_unitario: 1200, precio_total: 31200 },
+                    { nombre: "Controlador MPPT 60A", cantidad: 13, precio_unitario: 300, precio_total: 3900 }
                 ]
             }
         ]
     },
     eolico: {
-        capacidad_kw: 4.5,
-        energia_anual_kwh: 7200,
-        ahorro_anual_usd: 662.40,
-        co2_evitado_ton: 2.8,
-        // Generación eólica variable por condiciones andinas
-        generacion_mensual: [750, 680, 620, 580, 520, 480, 520, 580, 620, 680, 750, 800],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [0.29, 0.27, 0.24, 0.23, 0.20, 0.19, 0.20, 0.23, 0.24, 0.27, 0.29, 0.31],
-        co2_acumulado_anual: [0.29, 0.56, 0.80, 1.03, 1.23, 1.42, 1.62, 1.85, 2.09, 2.36, 2.65, 2.96],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
+        capacidad_kw: 53,
+        energia_anual_kwh: 20304,
+        ahorro_anual_usd: 391.75,
+        co2_evitado_ton: 36,
+        generacion_mensual: [1800, 1650, 1750, 1900, 2100, 2300, 2100, 1950, 1800, 1600, 1500, 1650],
+        velocidad_viento: [6.2, 5.8, 6.1, 6.8, 7.5, 8.2, 7.8, 7.2, 6.5, 5.9, 5.5, 6.0],
+        co2_evitado_mensual: [2.8, 2.6, 2.7, 2.9, 3.2, 3.5, 3.2, 3.0, 2.8, 2.5, 2.3, 2.5],
+        co2_acumulado_anual: [2.8, 5.4, 8.1, 11.0, 14.2, 17.7, 20.9, 23.9, 26.7, 29.2, 31.5, 34.0],
+        factor_capacidad: [0.32, 0.29, 0.31, 0.35, 0.39, 0.43, 0.39, 0.36, 0.32, 0.28, 0.26, 0.30],
        
         equipos: [
             {
                 categoria: "Aerogeneradores",
                 items: [
-                    { nombre: "Aerogenerador Horizontal 1.5kW", cantidad: 3, precio_unitario: 920, precio_total: 2760 },
-                    { nombre: "Torre 9m Galvanizada", cantidad: 3, precio_unitario: 480, precio_total: 1440 }
+                    { nombre: "Aerogenerador Horizontal 3kW", cantidad: 15, precio_unitario: 350, precio_total: 5250 },
+                    { nombre: "Torre 12m Galvanizada", cantidad: 8, precio_unitario: 600, precio_total: 4800 }
                 ]
             },
             {
                 categoria: "Sistema de Control",
                 items: [
-                    { nombre: "Controlador Eólico 30A", cantidad: 3, precio_unitario: 125, precio_total: 375 },
-                    { nombre: "Sistema de Frenado Automático", cantidad: 3, precio_unitario: 85, precio_total: 255 }
+                    { nombre: "Controlador Eólico 60A", cantidad: 9, precio_unitario: 180, precio_total: 1620 },
+                    { nombre: "Sistema de Frenado", cantidad: 10, precio_unitario: 100, precio_total: 1000 }
                 ]
             }
         ]
     },
     baterias: {
-        capacidad_kwh: 24,
+        capacidad_kwh: 250,
         equipos: [
             {
                 categoria: "Sistema de Almacenamiento",
                 items: [
-                    { nombre: "Batería Gel 12V 200Ah", cantidad: 8, precio_unitario: 280, precio_total: 2240 },
-                    { nombre: "Sistema de Gestión BMS", cantidad: 2, precio_unitario: 345, precio_total: 690 }
+                    { nombre: "Batería Litio 5kWh", cantidad: 15, precio_unitario: 1200, precio_total: 6000 },
+                    { nombre: "BMS Sistema de Gestión", cantidad: 5, precio_unitario: 800, precio_total: 4000 }
                 ]
             }
         ]
@@ -695,441 +688,15 @@ let sistemaCalculado1 = {
             {
                 categoria: "Instalación y Accesorios",
                 items: [
-                    { nombre: "Cableado DC/AC y Protecciones", cantidad: 1, precio_unitario: 1200, precio_total: 1200 },
-                    { nombre: "Tablero Eléctrico Principal", cantidad: 1, precio_unitario: 450, precio_total: 450 },
-                    { nombre: "Sistema de Monitoreo Básico", cantidad: 1, precio_unitario: 680, precio_total: 680 },
-                    { nombre: "Instalación y Capacitación", cantidad: 1, precio_unitario: 1800, precio_total: 1800 }
+                    { nombre: "Cableado DC y AC", cantidad: 1, precio_unitario: 4500, precio_total: 4500 },
+                    { nombre: "Gabinetes de Protección", cantidad: 4, precio_unitario: 250, precio_total: 1500 },
+                    { nombre: "Sistema de Monitoreo", cantidad: 1, precio_unitario: 2500, precio_total: 2500 },
+                    { nombre: "Instalación y Puesta en Marcha", cantidad: 1, precio_unitario: 5000, precio_total: 5000 }
                 ]
             }
         ]
     }
 };
-
-// SISTEMA BÁSICO - Presupuesto: $12,000
-let sistemaBasico = {
-    presupuesto: 12000,
-    solar: {
-        capacidad_kwp: 3.2,
-        energia_anual_kwh: 4800,
-        ahorro_anual_usd: 441.60,
-        co2_evitado_ton: 1.9,
-        generacion_mensual: [308, 346, 410, 448, 474, 499, 512, 499, 461, 423, 359, 319],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [19.2, 18.8, 18.5, 18.2, 17.8, 17.5, 17.2, 17.4, 17.8, 18.2, 18.6, 19.0],
-        equipos: [
-            {
-                categoria: "Paneles Solares",
-                items: [
-                    { nombre: "Panel Monocristalino 400W", cantidad: 8, precio_unitario: 165, precio_total: 1320 },
-                    { nombre: "Estructura de Montaje Básica", cantidad: 8, precio_unitario: 35, precio_total: 280 }
-                ]
-            },
-            {
-                categoria: "Equipos de Control",
-                items: [
-                    { nombre: "Inversor Híbrido 1.5kW", cantidad: 1, precio_unitario: 520, precio_total: 520 },
-                    { nombre: "Controlador MPPT 30A", cantidad: 1, precio_unitario: 145, precio_total: 145 }
-                ]
-            }
-        ]
-    },
-    eolico: {
-        capacidad_kw: 1.5,
-        energia_anual_kwh: 2400,
-        ahorro_anual_usd: 220.80,
-        co2_evitado_ton: 0.9,
-        generacion_mensual: [250, 227, 207, 193, 173, 160, 173, 193, 207, 227, 250, 267],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [0.10, 0.09, 0.08, 0.08, 0.07, 0.06, 0.07, 0.08, 0.08, 0.09, 0.10, 0.11],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
-        equipos: [
-            {
-                categoria: "Aerogeneradores",
-                items: [
-                    { nombre: "Aerogenerador Horizontal 1.5kW", cantidad: 1, precio_unitario: 890, precio_total: 890 },
-                    { nombre: "Torre 6m Galvanizada", cantidad: 1, precio_unitario: 380, precio_total: 380 }
-                ]
-            }
-        ]
-    },
-    baterias: {
-        capacidad_kwh: 4.8,
-        equipos: [
-            {
-                categoria: "Sistema de Almacenamiento",
-                items: [
-                    { nombre: "Batería AGM 12V 100Ah", cantidad: 4, precio_unitario: 185, precio_total: 740 },
-                    { nombre: "Sistema de Gestión BMS Básico", cantidad: 1, precio_unitario: 220, precio_total: 220 }
-                ]
-            }
-        ]
-    },
-    accesorios: {
-        equipos: [
-            {
-                categoria: "Instalación y Accesorios",
-                items: [
-                    { nombre: "Cableado DC/AC Básico", cantidad: 1, precio_unitario: 450, precio_total: 450 },
-                    { nombre: "Tablero Eléctrico Básico", cantidad: 1, precio_unitario: 280, precio_total: 280 },
-                    { nombre: "Instalación Básica", cantidad: 1, precio_unitario: 850, precio_total: 850 }
-                ]
-            }
-        ]
-    }
-};
-
-// SISTEMA ESTÁNDAR - Presupuesto: $35,000
-let sistemaEstandar = {
-    presupuesto: 35000,
-    solar: {
-        capacidad_kwp: 12.5,
-        energia_anual_kwh: 18750,
-        ahorro_anual_usd: 1725.00,
-        co2_evitado_ton: 7.3,
-        generacion_mensual: [1200, 1350, 1600, 1750, 1850, 1950, 2000, 1950, 1800, 1650, 1400, 1245],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [19.2, 18.8, 18.5, 18.2, 17.8, 17.5, 17.2, 17.4, 17.8, 18.2, 18.6, 19.0],
-        equipos: [
-            {
-                categoria: "Paneles Solares",
-                items: [
-                    { nombre: "Panel Monocristalino 400W", cantidad: 31, precio_unitario: 165, precio_total: 5115 },
-                    { nombre: "Estructura de Montaje Galvanizada", cantidad: 31, precio_unitario: 45, precio_total: 1395 }
-                ]
-            },
-            {
-                categoria: "Equipos de Control",
-                items: [
-                    { nombre: "Inversor Híbrido 3kW", cantidad: 4, precio_unitario: 680, precio_total: 2720 },
-                    { nombre: "Controlador MPPT 40A", cantidad: 2, precio_unitario: 185, precio_total: 370 }
-                ]
-            }
-        ]
-    },
-    eolico: {
-        capacidad_kw: 4.5,
-        energia_anual_kwh: 7200,
-        ahorro_anual_usd: 662.40,
-        co2_evitado_ton: 2.8,
-        generacion_mensual: [750, 680, 620, 580, 520, 480, 520, 580, 620, 680, 750, 800],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [0.29, 0.27, 0.24, 0.23, 0.20, 0.19, 0.20, 0.23, 0.24, 0.27, 0.29, 0.31],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
-        equipos: [
-            {
-                categoria: "Aerogeneradores",
-                items: [
-                    { nombre: "Aerogenerador Horizontal 1.5kW", cantidad: 3, precio_unitario: 920, precio_total: 2760 },
-                    { nombre: "Torre 9m Galvanizada", cantidad: 3, precio_unitario: 480, precio_total: 1440 }
-                ]
-            },
-            {
-                categoria: "Sistema de Control",
-                items: [
-                    { nombre: "Controlador Eólico 30A", cantidad: 3, precio_unitario: 125, precio_total: 375 },
-                    { nombre: "Sistema de Frenado Automático", cantidad: 3, precio_unitario: 85, precio_total: 255 }
-                ]
-            }
-        ]
-    },
-    baterias: {
-        capacidad_kwh: 24,
-        equipos: [
-            {
-                categoria: "Sistema de Almacenamiento",
-                items: [
-                    { nombre: "Batería Gel 12V 200Ah", cantidad: 8, precio_unitario: 280, precio_total: 2240 },
-                    { nombre: "Sistema de Gestión BMS", cantidad: 2, precio_unitario: 345, precio_total: 690 }
-                ]
-            }
-        ]
-    },
-    accesorios: {
-        equipos: [
-            {
-                categoria: "Instalación y Accesorios",
-                items: [
-                    { nombre: "Cableado DC/AC y Protecciones", cantidad: 1, precio_unitario: 1200, precio_total: 1200 },
-                    { nombre: "Tablero Eléctrico Principal", cantidad: 1, precio_unitario: 450, precio_total: 450 },
-                    { nombre: "Sistema de Monitoreo Básico", cantidad: 1, precio_unitario: 680, precio_total: 680 },
-                    { nombre: "Instalación y Capacitación", cantidad: 1, precio_unitario: 1800, precio_total: 1800 }
-                ]
-            }
-        ]
-    }
-};
-
-// SISTEMA PREMIUM - Presupuesto: $85,000
-let sistemaPremium = {
-    presupuesto: 85000,
-    solar: {
-        capacidad_kwp: 35.2,
-        energia_anual_kwh: 52800,
-        ahorro_anual_usd: 4857.60,
-        co2_evitado_ton: 20.6,
-        generacion_mensual: [3376, 3800, 4506, 4928, 5206, 5491, 5632, 5491, 5069, 4647, 3941, 3507],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [20.8, 20.4, 20.1, 19.8, 19.4, 19.1, 18.8, 19.0, 19.4, 19.8, 20.2, 20.6],
-        equipos: [
-            {
-                categoria: "Paneles Solares",
-                items: [
-                    { nombre: "Panel Monocristalino 440W PERC", cantidad: 80, precio_unitario: 195, precio_total: 15600 },
-                    { nombre: "Estructura de Montaje Premium", cantidad: 80, precio_unitario: 55, precio_total: 4400 }
-                ]
-            },
-            {
-                categoria: "Equipos de Control",
-                items: [
-                    { nombre: "Inversor Híbrido 8kW Trifásico", cantidad: 4, precio_unitario: 1280, precio_total: 5120 },
-                    { nombre: "Controlador MPPT 60A Premium", cantidad: 4, precio_unitario: 285, precio_total: 1140 }
-                ]
-            }
-        ]
-    },
-    eolico: {
-        capacidad_kw: 12,
-        energia_anual_kwh: 19200,
-        ahorro_anual_usd: 1766.40,
-        co2_evitado_ton: 7.5,
-        generacion_mensual: [2000, 1813, 1653, 1547, 1387, 1280, 1387, 1547, 1653, 1813, 2000, 2133],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [0.78, 0.71, 0.65, 0.60, 0.54, 0.50, 0.54, 0.60, 0.65, 0.71, 0.78, 0.83],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
-        equipos: [
-            {
-                categoria: "Aerogeneradores",
-                items: [
-                    { nombre: "Aerogenerador Horizontal 3kW Premium", cantidad: 4, precio_unitario: 1650, precio_total: 6600 },
-                    { nombre: "Torre 12m Galvanizada Reforzada", cantidad: 4, precio_unitario: 720, precio_total: 2880 }
-                ]
-            },
-            {
-                categoria: "Sistema de Control",
-                items: [
-                    { nombre: "Controlador Eólico 50A Inteligente", cantidad: 4, precio_unitario: 195, precio_total: 780 },
-                    { nombre: "Sistema de Frenado Automático Premium", cantidad: 4, precio_unitario: 145, precio_total: 580 }
-                ]
-            }
-        ]
-    },
-    baterias: {
-        capacidad_kwh: 72,
-        equipos: [
-            {
-                categoria: "Sistema de Almacenamiento",
-                items: [
-                    { nombre: "Batería LiFePO4 12V 300Ah", cantidad: 16, precio_unitario: 650, precio_total: 10400 },
-                    { nombre: "Sistema de Gestión BMS Avanzado", cantidad: 4, precio_unitario: 485, precio_total: 1940 }
-                ]
-            }
-        ]
-    },
-    accesorios: {
-        equipos: [
-            {
-                categoria: "Instalación y Accesorios",
-                items: [
-                    { nombre: "Cableado DC/AC Premium y Protecciones", cantidad: 1, precio_unitario: 2800, precio_total: 2800 },
-                    { nombre: "Tablero Eléctrico Trifásico Premium", cantidad: 1, precio_unitario: 980, precio_total: 980 },
-                    { nombre: "Sistema de Monitoreo Avanzado IoT", cantidad: 1, precio_unitario: 1650, precio_total: 1650 },
-                    { nombre: "Instalación Profesional y Capacitación", cantidad: 1, precio_unitario: 3500, precio_total: 3500 }
-                ]
-            }
-        ]
-    }
-};
-
-// SISTEMA INDUSTRIAL - Presupuesto: $180,000
-let sistemaIndustrial = {
-    presupuesto: 180000,
-    solar: {
-        capacidad_kwp: 98.4,
-        energia_anual_kwh: 147600,
-        ahorro_anual_usd: 13579.20,
-        co2_evitado_ton: 57.6,
-        generacion_mensual: [9456, 10620, 12607, 13776, 14567, 15354, 15744, 15354, 14172, 12996, 11021, 9804],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [21.2, 20.8, 20.5, 20.2, 19.8, 19.5, 19.2, 19.4, 19.8, 20.2, 20.6, 21.0],
-        equipos: [
-            {
-                categoria: "Paneles Solares",
-                items: [
-                    { nombre: "Panel Monocristalino 480W Tier-1", cantidad: 205, precio_unitario: 225, precio_total: 46125 },
-                    { nombre: "Estructura de Montaje Industrial", cantidad: 205, precio_unitario: 68, precio_total: 13940 }
-                ]
-            },
-            {
-                categoria: "Equipos de Control",
-                items: [
-                    { nombre: "Inversor Central 25kW Trifásico", cantidad: 4, precio_unitario: 3200, precio_total: 12800 },
-                    { nombre: "Controlador MPPT 80A Industrial", cantidad: 8, precio_unitario: 420, precio_total: 3360 }
-                ]
-            }
-        ]
-    },
-    eolico: {
-        capacidad_kw: 30,
-        energia_anual_kwh: 48000,
-        ahorro_anual_usd: 4416.00,
-        co2_evitado_ton: 18.7,
-        generacion_mensual: [5000, 4533, 4133, 3867, 3467, 3200, 3467, 3867, 4133, 4533, 5000, 5333],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [1.95, 1.77, 1.61, 1.51, 1.35, 1.25, 1.35, 1.51, 1.61, 1.77, 1.95, 2.08],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
-        equipos: [
-            {
-                categoria: "Aerogeneradores",
-                items: [
-                    { nombre: "Aerogenerador Industrial 5kW", cantidad: 6, precio_unitario: 4200, precio_total: 25200 },
-                    { nombre: "Torre 18m Industrial", cantidad: 6, precio_unitario: 1850, precio_total: 11100 }
-                ]
-            },
-            {
-                categoria: "Sistema de Control",
-                items: [
-                    { nombre: "Controlador Eólico Industrial 100A", cantidad: 6, precio_unitario: 385, precio_total: 2310 },
-                    { nombre: "Sistema de Frenado Industrial", cantidad: 6, precio_unitario: 280, precio_total: 1680 }
-                ]
-            }
-        ]
-    },
-    baterias: {
-        capacidad_kwh: 200,
-        equipos: [
-            {
-                categoria: "Sistema de Almacenamiento",
-                items: [
-                    { nombre: "Batería LiFePO4 48V 100Ah Industrial", cantidad: 42, precio_unitario: 850, precio_total: 35700 },
-                    { nombre: "Sistema de Gestión BMS Industrial", cantidad: 8, precio_unitario: 750, precio_total: 6000 }
-                ]
-            }
-        ]
-    },
-    accesorios: {
-        equipos: [
-            {
-                categoria: "Instalación y Accesorios",
-                items: [
-                    { nombre: "Cableado y Protecciones Industriales", cantidad: 1, precio_unitario: 8500, precio_total: 8500 },
-                    { nombre: "Tablero Industrial Trifásico", cantidad: 1, precio_unitario: 2800, precio_total: 2800 },
-                    { nombre: "Sistema SCADA de Monitoreo", cantidad: 1, precio_unitario: 4200, precio_total: 4200 },
-                    { nombre: "Instalación Industrial y Comisionado", cantidad: 1, precio_unitario: 8500, precio_total: 8500 }
-                ]
-            }
-        ]
-    }
-};
-
-// SISTEMA MEGA - Presupuesto: $500,000
-let sistemaMega = {
-    presupuesto: 500000,
-    solar: {
-        capacidad_kwp: 280,
-        energia_anual_kwh: 420000,
-        ahorro_anual_usd: 38640.00,
-        co2_evitado_ton: 164,
-        generacion_mensual: [26880, 30240, 35868, 39200, 41440, 43708, 44800, 43708, 40320, 36960, 31360, 27904],
-        irradiacion_solar: [4.2, 4.5, 4.8, 5.1, 5.4, 5.7, 6.0, 5.8, 5.5, 5.2, 4.8, 4.3],
-        temperatura_ambiente: [14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15],
-        horas_sol_promedio: [5.5, 6.0, 6.5, 7.0, 7.2, 7.5, 7.8, 7.5, 7.0, 6.5, 6.0, 5.5],
-        eficiencia_panel: [22.1, 21.7, 21.4, 21.1, 20.7, 20.4, 20.1, 20.3, 20.7, 21.1, 21.5, 21.9],
-        equipos: [
-            {
-                categoria: "Paneles Solares",
-                items: [
-                    { nombre: "Panel Bifacial 560W Tier-1", cantidad: 500, precio_unitario: 285, precio_total: 142500 },
-                    { nombre: "Estructura de Montaje Mega Solar", cantidad: 500, precio_unitario: 85, precio_total: 42500 }
-                ]
-            },
-            {
-                categoria: "Equipos de Control",
-                items: [
-                    { nombre: "Inversor Central 50kW Trifásico", cantidad: 6, precio_unitario: 8500, precio_total: 51000 },
-                    { nombre: "Optimizadores de Potencia", cantidad: 500, precio_unitario: 45, precio_total: 22500 }
-                ]
-            }
-        ]
-    },
-    eolico: {
-        capacidad_kw: 75,
-        energia_anual_kwh: 120000,
-        ahorro_anual_usd: 11040.00,
-        co2_evitado_ton: 46.8,
-        generacion_mensual: [12500, 11333, 10333, 9667, 8667, 8000, 8667, 9667, 10333, 11333, 12500, 13333],
-        velocidad_viento: [4.8, 4.5, 4.2, 3.8, 3.5, 3.2, 3.5, 3.8, 4.2, 4.5, 4.8, 5.1],
-        co2_evitado_mensual: [4.88, 4.42, 4.03, 3.77, 3.38, 3.12, 3.38, 3.77, 4.03, 4.42, 4.88, 5.20],
-        factor_capacidad: [0.19, 0.17, 0.16, 0.15, 0.13, 0.12, 0.13, 0.15, 0.16, 0.17, 0.19, 0.20],
-        equipos: [
-            {
-                categoria: "Aerogeneradores",
-                items: [
-                    { nombre: "Aerogenerador Industrial 15kW", cantidad: 5, precio_unitario: 12500, precio_total: 62500 },
-                    { nombre: "Torre 25m Industrial Reforzada", cantidad: 5, precio_unitario: 4800, precio_total: 24000 }
-                ]
-            },
-            {
-                categoria: "Sistema de Control",
-                items: [
-                    { nombre: "Controlador Eólico 200A Premium", cantidad: 5, precio_unitario: 680, precio_total: 3400 },
-                    { nombre: "Sistema de Frenado Automático Premium", cantidad: 5, precio_unitario: 450, precio_total: 2250 }
-                ]
-            }
-        ]
-    },
-    baterias: {
-        capacidad_kwh: 500,
-        equipos: [
-            {
-                categoria: "Sistema de Almacenamiento",
-                items: [
-                    { nombre: "Batería LiFePO4 100kWh Modular", cantidad: 5, precio_unitario: 15000, precio_total: 75000 },
-                    { nombre: "Sistema de Gestión EMS Avanzado", cantidad: 2, precio_unitario: 8500, precio_total: 17000 }
-                ]
-            }
-        ]
-    },
-    accesorios: {
-        equipos: [
-            {
-                categoria: "Instalación y Accesorios",
-                items: [
-                    { nombre: "Infraestructura Eléctrica Completa", cantidad: 1, precio_unitario: 25000, precio_total: 25000 },
-                    { nombre: "Centro de Control y Transformadores", cantidad: 1, precio_unitario: 18000, precio_total: 18000 },
-                    { nombre: "Sistema SCADA Avanzado y Telemetría", cantidad: 1, precio_unitario: 12000, precio_total: 12000 },
-                    { nombre: "Ingeniería, Instalación y Puesta en Marcha", cantidad: 1, precio_unitario: 22000, precio_total: 22000 }
-                ]
-            }
-        ]
-    }
-};
-
-
-
-// SELECTOR ALEATORIO DE SISTEMAS
-const sistemas = [sistemaBasico, sistemaEstandar, sistemaPremium, sistemaIndustrial, sistemaMega];
-const nombresistemas = ['sistemaCalculado1','Básico', 'Estándar', 'Premium', 'Industrial', 'Mega'];
-
-sistemaCalculado = obtenerSistemaAleatorio();
-
-// Función para obtener un sistema aleatorio
-function obtenerSistemaAleatorio() {
-    const indiceAleatorio = Math.floor(Math.random() * sistemas.length);
-    const sistemaSeleccionado = sistemas[indiceAleatorio];
-    const nombreSistema = nombresistemas[indiceAleatorio];
-    
-    console.log(`Sistema seleccionado: ${nombreSistema} - Presupuesto: ${sistemaSeleccionado.presupuesto.toLocaleString()}`);
-    return sistemaSeleccionado;
-}
-
 
 // Calcular totales
 function calcularTotales() {
@@ -1142,9 +709,12 @@ function calcularTotales() {
         sistemaCalculado[sistema].equipos.forEach(categoria => {
             categoria.items.forEach(item => {
                 costoTotal += item.precio_total;
+               
             });
         });
     });
+
+     costoTotal = costoTotal/2;
     
     const roi = costoTotal / totalAhorro;
     
@@ -1158,14 +728,18 @@ function actualizarInterfaz() {
     // Actualizar valores solares
     document.getElementById('solar-capacity').textContent = `${sistemaCalculado.solar.capacidad_kwp} kWp`;
     document.getElementById('solar-energy').textContent = `${sistemaCalculado.solar.energia_anual_kwh.toLocaleString()} kWh / año`;
-    document.getElementById('solar-savings').textContent = `$${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)} / año`;
+    document.getElementById('solar-savings').textContent = `${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)} $ / año`;
     document.getElementById('solar-co2').textContent = `${sistemaCalculado.solar.co2_evitado_ton} ton / año`;
     
     // Actualizar valores eólicos
     document.getElementById('wind-capacity').textContent = `${sistemaCalculado.eolico.capacidad_kw} kW`;
     document.getElementById('wind-energy').textContent = `${sistemaCalculado.eolico.energia_anual_kwh.toLocaleString()} kWh / año`;
-    document.getElementById('wind-savings').textContent = `$${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)} / año`;
+    document.getElementById('wind-savings').textContent = `${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)} $ / año`;
     document.getElementById('wind-co2').textContent = `${sistemaCalculado.eolico.co2_evitado_ton} ton / año`;
+    
+    // Actualizar totales
+    document.getElementById('total-co2').textContent = `${totalCO2} ton`;
+    document.getElementById('roi-years').textContent = `${roi.toFixed(1)} años`;
 }
 
 // Mostrar equipos solares
@@ -1199,19 +773,13 @@ function mostrarEquiposSolar() {
             <h5><i class="fas fa-calculator"></i> Resumen Sistema Solar</h5>
             <div class="row">
                 <div class="col-md-6">
-                    <strong>Costo Total: $${totalSolar.toLocaleString()}</strong><br>
+                    <strong>Costo Total: ${totalSolar.toLocaleString()}</strong><br>
                     <span class="text-muted">Capacidad: ${sistemaCalculado.solar.capacidad_kwp} kWp</span>
                 </div>
                 <div class="col-md-6">
-                    <strong>Ahorro Anual: $${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)}</strong><br>
+                    <strong>Ahorro Anual: ${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)}</strong><br>
                     <span class="text-muted">ROI: ${(totalSolar / sistemaCalculado.solar.ahorro_anual_usd).toFixed(1)} años</span>
                 </div>
-            </div>
-            <div class="rural-context mt-3">
-                <h6><i class="fas fa-info-circle"></i> Contexto Rural</h6>
-                <p>Sistema dimensionado para consumo típico de escuela rural (800-1200 kWh/mes)</p>
-                <p>Componentes seleccionados por durabilidad en clima andino</p>
-                <p>Precios incluyen transporte a zonas rurales de Riobamba</p>
             </div>
         </div>
     `;
@@ -1234,9 +802,9 @@ function mostrarEquiposEolicos() {
                 <div class="equipment-item">
                     <div class="equipment-name">${item.nombre}</div>
                     <div class="equipment-details">
-                        Cantidad: ${item.cantidad} | Precio unitario: $${item.precio_unitario.toLocaleString()}
+                        Cantidad: ${item.cantidad} | Precio unitario: ${item.precio_unitario.toLocaleString()}
                     </div>
-                    <div class="equipment-price">Total: $${item.precio_total.toLocaleString()}</div>
+                    <div class="equipment-price">Total: ${item.precio_total.toLocaleString()}</div>
                 </div>
             `;
         });
@@ -1253,19 +821,13 @@ function mostrarEquiposEolicos() {
             <h5><i class="fas fa-calculator"></i> Resumen Sistema Eólico</h5>
             <div class="row">
                 <div class="col-md-6">
-                    <strong>Costo Total: $${totalEolico.toLocaleString()}</strong><br>
+                    <strong>Costo Total: ${totalEolico.toLocaleString()}</strong><br>
                     <span class="text-muted">Capacidad: ${sistemaCalculado.eolico.capacidad_kw} kW</span>
                 </div>
                 <div class="col-md-6">
-                    <strong>Ahorro Anual: $${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)}</strong><br>
+                    <strong>Ahorro Anual: ${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)}</strong><br>
                     <span class="text-muted">ROI: ${(totalEolico / sistemaCalculado.eolico.ahorro_anual_usd).toFixed(1)} años</span>
                 </div>
-            </div>
-            <div class="rural-context mt-3">
-                <h6><i class="fas fa-info-circle"></i> Consideraciones Eólicas</h6>
-                <p>Vientos moderados típicos de valles andinos (3-5 m/s promedio)</p>
-                <p>Aerogeneradores de baja velocidad de arranque</p>
-                <p>Torres dimensionadas para condiciones sísmicas locales</p>
             </div>
         </div>
     `;
@@ -1281,34 +843,26 @@ function mostrarTodosEquipos() {
     const contenido = document.getElementById('contenido-todos-equipos');
     const { totalCO2, totalAhorro, costoTotal, roi } = calcularTotales();
     
-    html = `
-        <div class="rural-context">
-            <h6><i class="fas fa-school"></i> Impacto en la Educación Rural</h6>
-            <p><strong>Beneficiarios:</strong> Aproximadamente 75-120 estudiantes y 8-12 docentes</p>
-            <p><strong>Horas de operación:</strong> 8-10 horas diarias (incluye actividades nocturnas)</p>
-            <p><strong>Equipos a alimentar:</strong> Computadoras, proyectores, iluminación, refrigeración</p>
-            <p><strong>Autonomía:</strong> 2-3 días sin sol ni viento con sistema de baterías</p>
-        </div>
-        
+    let html = `
         <div class="row">
             <div class="col-md-8">
                 <h4><i class="fas fa-info-circle"></i> Resumen Ejecutivo</h4>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="text-center p-3 bg-primary text-white rounded">
-                            <h5>${(sistemaCalculado.solar.capacidad_kwp + sistemaCalculado.eolico.capacidad_kw).toFixed(1)} kW</h5>
+                            <h5>${sistemaCalculado.solar.capacidad_kwp + sistemaCalculado.eolico.capacidad_kw} kW</h5>
                             <small>Capacidad Total</small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="text-center p-3 bg-success text-white rounded">
-                            <h5>$${totalAhorro.toFixed(0)}</h5>
+                            <h5>${totalAhorro.toFixed(0)}</h5>
                             <small>Ahorro Anual</small>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="text-center p-3 bg-warning text-white rounded">
-                            <h5>${totalCO2.toFixed(1)} ton</h5>
+                            <h5>${totalCO2} ton</h5>
                             <small>CO2 Evitado/año</small>
                         </div>
                     </div>
@@ -1323,14 +877,8 @@ function mostrarTodosEquipos() {
             <div class="col-md-4">
                 <div class="cost-breakdown">
                     <h5><i class="fas fa-dollar-sign"></i> Inversión Total</h5>
-                    <h3 class="text-primary">$${costoTotal.toLocaleString()}</h3>
-                    <small class="text-muted">Sistema completo instalado y operativo</small>
-                    <div class="mt-2">
-                        <small><strong>Financiamiento sugerido:</strong></small><br>
-                        <small>• Ministerio de Educación: 60%</small><br>
-                        <small>• GAD Provincial: 25%</small><br>
-                        <small>• Comunidad: 15%</small>
-                    </div>
+                    <h3 class="text-primary">${costoTotal.toLocaleString() }</h3>
+                    <small class="text-muted">Sistema completo instalado</small>
                 </div>
             </div>
         </div>
@@ -1363,11 +911,11 @@ function mostrarTodosEquipos() {
                             </div>
                             <div class="col-md-3">
                                 <small class="text-muted">Precio unitario:</small><br>
-                                <strong>$${item.precio_unitario.toLocaleString()}</strong>
+                                <strong>${item.precio_unitario.toLocaleString()}</strong>
                             </div>
                             <div class="col-md-3">
                                 <small class="text-muted">Precio total:</small><br>
-                                <div class="equipment-price">$${item.precio_total.toLocaleString()}</div>
+                                <div class="equipment-price">${item.precio_total.toLocaleString()}</div>
                             </div>
                         </div>
                     </div>
@@ -1381,36 +929,27 @@ function mostrarTodosEquipos() {
     // Agregar análisis financiero
     html += `
         <div class="total-section">
-            <h4><i class="fas fa-chart-pie"></i> Análisis Financiero para Escuela Rural</h4>
+            <h4><i class="fas fa-chart-pie"></i> Análisis Financiero Detallado</h4>
             <div class="row">
                 <div class="col-md-6">
                     <h6>Flujo de Caja (10 años)</h6>
                     <ul class="list-unstyled">
-                        <li><strong>Inversión inicial:</strong> -$${costoTotal.toLocaleString()}</li>
-                        <li><strong>Ahorro anual:</strong> +$${totalAhorro.toFixed(0)}</li>
-                        <li><strong>Mantenimiento anual:</strong> -$${(costoTotal * 0.03).toFixed(0)}</li>
-                        <li><strong>Ahorro neto anual:</strong> +$${(totalAhorro - costoTotal * 0.03).toFixed(0)}</li>
-                        <li><strong>Punto de equilibrio:</strong> ${roi.toFixed(1)} años</li>
+                        <li><strong>Inversión inicial:</strong> -${costoTotal.toLocaleString()}</li>
+                        <li><strong>Ahorro anual:</strong> +${totalAhorro.toFixed(0)}</li>
+                        <li><strong>Mantenimiento anual:</strong> -${(costoTotal * 0.02).toFixed(0)}</li>
+                        <li><strong>Ahorro neto anual:</strong> +${(totalAhorro - costoTotal * 0.02).toFixed(0)}</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h6>Impacto Ambiental (20 años)</h6>
+                    <h6>Impacto Ambiental (25 años)</h6>
                     <ul class="list-unstyled">
-                        <li><strong>CO2 evitado total:</strong> ${(totalCO2 * 20).toFixed(1)} toneladas</li>
-                        <li><strong>Equivalente a plantar:</strong> ${Math.round(totalCO2 * 20 * 12)} árboles</li>
-                        <li><strong>Energía limpia generada:</strong> ${((sistemaCalculado.solar.energia_anual_kwh + sistemaCalculado.eolico.energia_anual_kwh) * 20 / 1000).toFixed(0)} MWh</li>
-                        <li><strong>Ahorro acumulado:</strong> $${(totalAhorro * 20).toFixed(0)}</li>
+                        <li><strong>CO2 evitado total:</strong> ${totalCO2 * 25} toneladas</li>
+                        <li><strong>Equivalente a plantar:</strong> ${Math.round(totalCO2 * 25 * 16)} árboles</li>
+                        <li><strong>Energía limpia generada:</strong> ${((sistemaCalculado.solar.energia_anual_kwh + sistemaCalculado.eolico.energia_anual_kwh) * 25 / 1000).toFixed(0)} MWh</li>
+                        <li><strong>Reducción huella carbono:</strong> ${((totalCO2 * 25) / 1000).toFixed(1)} kt CO2</li>
                     </ul>
                 </div>
             </div>
-        </div>
-        
-        <div class="rural-context">
-            <h6><i class="fas fa-lightbulb"></i> Beneficios Adicionales</h6>
-            <p><strong>Educativo:</strong> Aulas de computación sin restricciones eléctricas</p>
-            <p><strong>Comunitario:</strong> Centro de carga para dispositivos móviles</p>
-            <p><strong>Pedagógico:</strong> Enseñanza práctica sobre energías renovables</p>
-            <p><strong>Económico:</strong> Reducción de costos operativos de la escuela</p>
         </div>
     `;
     
@@ -1423,7 +962,7 @@ function mostrarTodosEquipos() {
 // Mostrar gráficos solares
 function mostrarGraficosSolar() {
     const contenido = document.getElementById('contenido-graficos');
-    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-solar-panel"></i> Análisis Solar - Riobamba';
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-solar-panel"></i> Análisis Gráfico - Sistema Solar';
     
     contenido.innerHTML = `
         <div class="row">
@@ -1431,7 +970,7 @@ function mostrarGraficosSolar() {
                 <div class="chart-container">
                     <canvas id="chartSolarGeneracion"></canvas>
                 </div>
-                <h6 class="text-center">Generación Solar Mensual - Riobamba</h6>
+                <h6 class="text-center">Generación Solar Mensual</h6>
             </div>
             <div class="col-md-6">
                 <div class="chart-container">
@@ -1445,13 +984,13 @@ function mostrarGraficosSolar() {
                 <div class="chart-container">
                     <canvas id="chartRadiacionSolar"></canvas>
                 </div>
-                <h6 class="text-center">Irradiación Solar Andina</h6>
+                <h6 class="text-center">Radiación Solar Anual</h6>
             </div>
             <div class="col-md-6">
                 <div class="chart-container">   
-                    <canvas id="chartAhorroSolar"></canvas>
+                    <canvas id="chartSolarCO2"></canvas>
                 </div>
-                <h6 class="text-center">Ahorro Mensual por Energía Solar</h6>
+                <h6 class="text-center">CO2 Evitado Acumulado</h6>
             </div>
         </div>
     `;
@@ -1468,7 +1007,7 @@ function mostrarGraficosSolar() {
 // Mostrar gráficos eólicos
 function mostrarGraficosEolicos() {
     const contenido = document.getElementById('contenido-graficos');
-    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-wind"></i> Análisis Eólico - Condiciones Andinas';
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-wind"></i> Análisis Gráfico - Sistema Eólico';
     
     contenido.innerHTML = `
         <div class="row">
@@ -1485,18 +1024,20 @@ function mostrarGraficosEolicos() {
                 <h6 class="text-center">Distribución de Costos Eólicos</h6>
             </div>
         </div>
+     
+
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="chart-container">
                     <canvas id="chartVientoVelocidad"></canvas>
                 </div>
-                <h6 class="text-center">Perfil de Viento - Valle Andino</h6>
+                <h6 class="text-center">Perfil de Viento Promedio</h6>
             </div>
             <div class="col-md-6">
                 <div class="chart-container">
-                    <canvas id="chartAhorroEolico"></canvas>
+                    <canvas id="chartEolicoCO2"></canvas>
                 </div>
-                <h6 class="text-center">Ahorro Mensual por Energía Eólica</h6>
+                <h6 class="text-center">CO2 Evitado Mensual - Eólico</h6>
             </div>
         </div>
     `;
@@ -1512,7 +1053,7 @@ function mostrarGraficosEolicos() {
 // Mostrar análisis completo
 function mostrarGraficosCompletos() {
     const contenido = document.getElementById('contenido-graficos');
-    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-chart-area"></i> Análisis Completo - Escuela Rural';
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-chart-area"></i> Análisis Completo del Sistema Híbrido';
     
     contenido.innerHTML = `
         <div class="row">
@@ -1526,7 +1067,7 @@ function mostrarGraficosCompletos() {
                 <div class="chart-container">
                     <canvas id="chartComparativoCostos"></canvas>
                 </div>
-                <h6 class="text-center">Inversión por Componente</h6>
+                <h6 class="text-center">Comparativo de Inversiones</h6>
             </div>
         </div>
         <div class="row mt-4">
@@ -1534,13 +1075,13 @@ function mostrarGraficosCompletos() {
                 <div class="chart-container">
                     <canvas id="chartFlujoFinanciero"></canvas>
                 </div>
-                <h6 class="text-center">Flujo Financiero (10 años)</h6>
+                <h6 class="text-center">Flujo Financiero Proyectado (10 años)</h6>
             </div>
             <div class="col-md-6">
                 <div class="chart-container">
-                    <canvas id="chartImpactoEducativo"></canvas>
+                    <canvas id="chartImpactoAmbiental"></canvas>
                 </div>
-                <h6 class="text-center">Impacto en la Educación</h6>
+                <h6 class="text-center">Impacto Ambiental Acumulado</h6>
             </div>
         </div>
     `;
@@ -1563,7 +1104,7 @@ function crearGraficosSolar() {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             datasets: [{
                 label: 'Generación Solar (kWh)',
-                data: sistemaCalculado.solar.generacion_mensual,
+                data: [3800, 3950, 4200, 4350, 4600, 4800, 5200, 5100, 4700, 4400, 4000, 3700],
                 borderColor: '#f39c12',
                 backgroundColor: 'rgba(243, 156, 18, 0.1)',
                 tension: 0.4,
@@ -1577,15 +1118,6 @@ function crearGraficosSolar() {
                 legend: {
                     display: false
                 }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'kWh'
-                    }
-                }
             }
         }
     });
@@ -1595,32 +1127,27 @@ function crearGraficosSolar() {
     new Chart(ctxCostos, {
         type: 'doughnut',
         data: {
-            labels: ['Paneles', 'Inversores', 'Estructura', 'Controladores'],
+            labels: ['Paneles', 'Inversores', 'Estructura', 'Instalación'],
             datasets: [{
-                data: [5115, 2720, 1395, 370],
+                data: [51660, 31200, 19350, 15000],
                 backgroundColor: ['#f39c12', '#e74c3c', '#3498db', '#27ae60']
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
+            maintainAspectRatio: false
         }
     });
     
-    // Gráfico de radiación solar
+    // Gráfico de radiación solar (tipo radar)
     const ctxRadiacion = document.getElementById('chartRadiacionSolar').getContext('2d');
     new Chart(ctxRadiacion, {
         type: 'radar',
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             datasets: [{
-                label: 'Irradiación (kWh/m²/día)',
-                data: sistemaCalculado.solar.irradiacion_solar,
+                label: 'Radiación Solar (kWh/m²/día)',
+                data: [4.8, 5.1, 5.3, 5.5, 5.8, 6.0, 6.2, 6.1, 5.9, 5.6, 5.2, 4.9],
                 borderColor: '#f39c12',
                 backgroundColor: 'rgba(243, 156, 18, 0.2)',
                 pointBackgroundColor: '#f39c12',
@@ -1649,40 +1176,28 @@ function crearGraficosSolar() {
         }
     });
     
-    // Gráfico de ahorro mensual
-    const ctxAhorro = document.getElementById('chartAhorroSolar').getContext('2d');
-    const ahorroMensual = sistemaCalculado.solar.generacion_mensual.map(gen => gen * 0.092);
-    new Chart(ctxAhorro, {
-        type: 'bar',
+    // Gráfico CO2
+    const ctxCO2 = document.getElementById('chartSolarCO2').getContext('2d');
+    new Chart(ctxCO2, {
+        type: 'line',
         data: {
-            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            labels: Array.from({length: 25}, (_, i) => `Año ${i + 1}`),
             datasets: [{
-                label: 'Ahorro Mensual ($)',
-                data: ahorroMensual,
-                backgroundColor: '#27ae60',
+                label: 'CO2 Evitado Acumulado (ton)',
+                data: Array.from({length: 25}, (_, i) => 51 * (i + 1)),
                 borderColor: '#27ae60',
-                borderWidth: 1
+                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                fill: true
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'USD'
-                    }
-                }
-            }
+            maintainAspectRatio: false
         }
     });
+
+
+   
 }
 
 // Crear gráficos eólicos
@@ -1695,7 +1210,7 @@ function crearGraficosEolicos() {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             datasets: [{
                 label: 'Generación Eólica (kWh)',
-                data: sistemaCalculado.eolico.generacion_mensual,
+                data: [1800, 1650, 1750, 1900, 2100, 2300, 2100, 1950, 1800, 1600, 1500, 1650],
                 borderColor: '#3498db',
                 backgroundColor: 'rgba(52, 152, 219, 0.1)',
                 tension: 0.4,
@@ -1704,21 +1219,7 @@ function crearGraficosEolicos() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'kWh'
-                    }
-                }
-            }
+            maintainAspectRatio: false
         }
     });
     
@@ -1727,20 +1228,15 @@ function crearGraficosEolicos() {
     new Chart(ctxCostos, {
         type: 'doughnut',
         data: {
-            labels: ['Aerogeneradores', 'Torres', 'Controladores', 'Seguridad'],
+            labels: ['Aerogeneradores', 'Torres', 'Controladores', 'Instalación'],
             datasets: [{
-                data: [2760, 1440, 375, 255],
+                data: [72000, 45000, 3420, 12000],
                 backgroundColor: ['#3498db', '#9b59b6', '#e67e22', '#1abc9c']
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
+            maintainAspectRatio: false
         }
     });
     
@@ -1752,7 +1248,7 @@ function crearGraficosEolicos() {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             datasets: [{
                 label: 'Velocidad del Viento (m/s)',
-                data: sistemaCalculado.eolico.velocidad_viento,
+                data: [6.2, 5.8, 6.1, 6.8, 7.5, 8.2, 7.8, 7.2, 6.5, 5.9, 5.5, 6.0],
                 borderColor: '#3498db',
                 backgroundColor: 'rgba(52, 152, 219, 0.2)',
                 pointBackgroundColor: '#3498db',
@@ -1775,25 +1271,26 @@ function crearGraficosEolicos() {
                         display: true
                     },
                     suggestedMin: 0,
-                    suggestedMax: 6
+                    suggestedMax: 10
                 }
             }
         }
     });
 
-    // Gráfico de ahorro mensual eólico
-    const ctxAhorroEolico = document.getElementById('chartAhorroEolico').getContext('2d');
-    const ahorroMensualEolico = sistemaCalculado.eolico.generacion_mensual.map(gen => gen * 0.092);
-    new Chart(ctxAhorroEolico, {
+
+
+     // Gráfico CO2 evitado eólico
+    const ctxCO2Eolico = document.getElementById('chartEolicoCO2').getContext('2d');
+    new Chart(ctxCO2Eolico, {
         type: 'bar',
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             datasets: [{
-                label: 'Ahorro Mensual ($)',
-                data: ahorroMensualEolico,
-                backgroundColor: '#3498db',
-                borderColor: '#3498db',
-                borderWidth: 1
+                label: 'CO2 Evitado (ton/mes)',
+                data: sistemaCalculado.eolico.co2_evitado_mensual,
+                backgroundColor: 'rgba(39, 174, 96, 0.8)',
+                borderColor: '#27ae60',
+                borderWidth: 2
             }]
         },
         options: {
@@ -1806,11 +1303,7 @@ function crearGraficosEolicos() {
             },
             scales: {
                 y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'USD'
-                    }
+                    beginAtZero: true
                 }
             }
         }
@@ -1846,11 +1339,7 @@ function crearGraficosCompletos() {
                     stacked: true
                 },
                 y: {
-                    stacked: true,
-                    title: {
-                        display: true,
-                        text: 'kWh'
-                    }
+                    stacked: true
                 }
             }
         }
@@ -1861,27 +1350,22 @@ function crearGraficosCompletos() {
     new Chart(ctxCostosComp, {
         type: 'pie',
         data: {
-            labels: ['Sistema Solar', 'Sistema Eólico', 'Baterías', 'Instalación'],
+            labels: ['Sistema Solar', 'Sistema Eólico', 'Baterías', 'Accesorios'],
             datasets: [{
-                data: [9600, 4830, 2930, 4130],
+                data: [106110, 124020, 109000, 30000],
                 backgroundColor: ['#f39c12', '#3498db', '#27ae60', '#95a5a6']
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
+            maintainAspectRatio: false
         }
     });
     
     // Flujo financiero
     const ctxFlujo = document.getElementById('chartFlujoFinanciero').getContext('2d');
     const { totalCO2, totalAhorro, costoTotal, roi } = calcularTotales();
-    const mantenimientoAnual = costoTotal * 0.03;
+    const mantenimientoAnual = costoTotal * 0.02;
     const ahorroNeto = totalAhorro - mantenimientoAnual;
     
     const flujoAcumulado = [];
@@ -1911,53 +1395,56 @@ function crearGraficosCompletos() {
                 legend: {
                     display: false
                 }
-            },
-            scales: {
-                y: {
-                    title: {
-                        display: true,
-                        text: 'USD'
-                    }
-                }
             }
         }
     });
     
-    // Impacto educativo
-    const ctxEducativo = document.getElementById('chartImpactoEducativo').getContext('2d');
-    new Chart(ctxEducativo, {
-        type: 'doughnut',
+    // Impacto ambiental
+    const ctxAmbiental = document.getElementById('chartImpactoAmbiental').getContext('2d');
+    new Chart(ctxAmbiental, {
+        type: 'line',
         data: {
-            labels: ['Computadoras', 'Proyectores', 'Iluminación', 'Ventilación', 'Otros'],
-            datasets: [{
-                data: [40, 25, 20, 10, 5],
-                backgroundColor: ['#e74c3c', '#f39c12', '#2ecc71', '#3498db', '#9b59b6']
-            }]
+            labels: Array.from({length: 25}, (_, i) => i + 1),
+            datasets: [
+                {
+                    label: 'CO2 Solar (ton)',
+                    data: Array.from({length: 25}, (_, i) => sistemaCalculado.solar.co2_evitado_ton * (i + 1)),
+                    borderColor: '#f39c12',
+                    fill: false
+                },
+                {
+                    label: 'CO2 Eólico (ton)',
+                    data: Array.from({length: 25}, (_, i) => sistemaCalculado.eolico.co2_evitado_ton * (i + 1)),
+                    borderColor: '#3498db',
+                    fill: false
+                },
+                {
+                    label: 'CO2 Total (ton)',
+                    data: Array.from({length: 25}, (_, i) => (sistemaCalculado.solar.co2_evitado_ton + sistemaCalculado.eolico.co2_evitado_ton) * (i + 1)),
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    fill: true
+                }
+            ]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                title: {
-                    display: true,
-                    text: 'Distribución del Consumo Eléctrico (%)'
-                }
-            }
+            maintainAspectRatio: false
         }
     });
 }
-
 // Mostrar detalles completos
 function mostrarDetallesCompletos() {
+    // Aquí podrías redirigir a una página completa de detalles
+    // o mostrar un modal muy detallado
+    console.log('Mostrando detalles completos...');
     mostrarTodosEquipos();
 }
 
 // Descargar reporte
 function descargarReporte() {
-    alert('Reporte para escuela rural de Riobamba generándose... Incluirá análisis técnico, económico y de impacto educativo.');
+    // Aquí implementarías la funcionalidad de descarga
+    alert('Funcionalidad de descarga en desarrollo. El reporte se generará en PDF con todos los datos del sistema.');
 }
 
 // Inicializar cuando la página carga
@@ -1969,79 +1456,47 @@ window.addEventListener('load', function() {
     loader.addEventListener('transitionend', function() {
         loader.style.display = 'none';
         document.getElementById('content').classList.add('fade-in');
-
-         // Flask pasa `sistema_calculado` como una cadena JSON
-        const sistemaCalculado = JSON.parse('{{ sistema_calculado|safe }}');
-
-        console.log("Sistema calculado:", sistemaCalculado);
-        console.log("Solar:", sistemaCalculado.solar.capacidad_kwp + " kWp");
-        console.log("Eólica:", sistemaCalculado.eolico.capacidad_kw + " kW");
-        console.log("Baterías:", sistemaCalculado.baterias.capacidad_kwh + " kWh");
-        console.log("Costo total:", sistemaCalculado.resumen.costo_total);
-        console.log("ROI:", sistemaCalculado.resumen.roi_años + " años");
-
-
-        cargarDatosDesdeFlask(sistemaCalculado);
         
         // Actualizar interfaz con datos calculados
         setTimeout(() => {
-           
             actualizarInterfaz();
         }, 500);
     });
 });
 
-// Función para integrar con el backend ML
+// Función para integrar con el backend ML (cuando esté disponible)
 function integrarConBackendML() {
-    // Actualizar con datos del Flask cuando esté disponible
+    // Esta función se llamaría para obtener datos reales del modelo ML
+    // Por ahora usa datos simulados
+    
     fetch('/api/predict-system', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            latitud: -1.6650,
-            longitud: -78.6550,
-            altitud_m: 2750,
-            area_disponible_techo_m2: 200,
-            area_disponible_terreno_m2: 400,
-            numero_estudiantes: 85,
-            consumo_mensual_kwh: 950,
-            presupuesto_solar_usd: 12000,
-            presupuesto_eolico_usd: 6000
+            // Datos del formulario anterior
+            latitud: -1.65,
+            longitud: -78.65,
+            altitud_m: 3200,
+            area_disponible_techo_m2: 400,
+            area_disponible_terreno_m2: 800,
+            numero_estudiantes: 75,
+            consumo_mensual_kwh: 350,
+            presupuesto_solar_usd: 10000,
+            presupuesto_eolico_usd: 5000
         })
     })
     .then(response => response.json())
     .then(data => {
+        // Actualizar sistemaCalculado con datos reales
         sistemaCalculado = data;
         actualizarInterfaz();
     })
     .catch(error => {
         console.error('Error:', error);
-        // Mantener datos realistas por defecto
+        // Mantener datos simulados en caso de error
     });
-}
-
-// Funciones adicionales para datos dinámicos desde Flask
-function cargarDatosDesdeFlask(datosFlask) {
-    if (datosFlask && datosFlask.sistema_calculado) {
-        sistemaCalculado = JSON.parse(datosFlask.sistema_calculado);
-        actualizarInterfaz();
-    }
-}
-
-// Validar datos para el contexto rural
-function validarDatosRurales(datos) {
-    // Validaciones específicas para escuelas rurales de Riobamba
-    const validaciones = {
-        capacidad_solar_max: 25, // kWp máximo razonable
-        capacidad_eolica_max: 10, // kW máximo razonable
-        presupuesto_max: 35000, // USD máximo para escuela rural
-        roi_max: 12, // años máximo aceptable
-        co2_min: 5 // ton mínimo de impacto ambiental
-    };
-    
-    return datos;
 }
 </script>
 

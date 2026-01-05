@@ -177,7 +177,7 @@
     .summary-row {
       display: flex;
       align-items: center;
-      padding: 15px;
+      padding: 8px;
       border-bottom: 1px solid #eee;
       transition: background-color 0.3s;
     }
@@ -343,7 +343,7 @@
         <div class="alert alert-info" style="border-radius: 15px; border: none; background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
           <i class="fas fa-info-circle"></i>
           <strong>Instrucciones:</strong> Ingrese los presupuestos disponibles para cada tipo de energía. 
-          <br>• <strong>Presupuesto mínimo:</strong> $2,500 por tecnología para poder instalar equipos
+          <br>• <strong>Presupuesto mínimo:</strong> $7500 por tecnología para poder instalar equipos
           <br>• <strong>Presupuesto $0:</strong> Válido si no desea usar esa tecnología
           <br>• <strong>Al menos una tecnología</strong> debe tener presupuesto asignado
           <br><small class="text-muted">💡 El botón de resumen aparecerá cuando los datos sean válidos</small>
@@ -363,7 +363,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="resumenModalLabel">
-            <i class="fas fa-brain"></i> Resumen Neurona - Análisis de Datos
+            <i class="fas fa-brain"></i> Resumen para modelo ML - Análisis de Datos
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -566,25 +566,25 @@
       // Validar presupuesto mínimo de $2,500 para cada tecnología que tenga asignación
       let mensajesError = [];
       
-      if (presupuestoSolar > 0 && presupuestoSolar < 2500) {
+      if (presupuestoSolar > 0 && presupuestoSolar < 5000) {
         mensajesError.push('• El presupuesto para energía solar debe ser de al menos $2,500 para poder instalar equipos.');
       }
       
-      if (presupuestoEolico > 0 && presupuestoEolico < 2500) {
+      if (presupuestoEolico > 0 && presupuestoEolico < 5000) {
         mensajesError.push('• El presupuesto para energía eólica debe ser de al menos $2,500 para poder instalar equipos.');
       }
 
       // Si hay errores de presupuesto mínimo, mostrarlos
       if (mensajesError.length > 0) {
         // Agregar efectos visuales a los campos con error
-        if (presupuestoSolar > 0 && presupuestoSolar < 2500) {
+        if (presupuestoSolar > 0 && presupuestoSolar < 5000) {
           document.getElementById('presupuestoSolar').classList.add('input-validation-error');
           setTimeout(() => {
             document.getElementById('presupuestoSolar').classList.remove('input-validation-error');
           }, 2000);
         }
         
-        if (presupuestoEolico > 0 && presupuestoEolico < 2500) {
+        if (presupuestoEolico > 0 && presupuestoEolico < 5000) {
           document.getElementById('presupuestoEolico').classList.add('input-validation-error');
           setTimeout(() => {
             document.getElementById('presupuestoEolico').classList.remove('input-validation-error');
@@ -656,8 +656,8 @@ Swal.fire({
       const noAmbosCero = !(presupuestoSolar === 0 && presupuestoEolico === 0);
       
       // Verificar presupuestos mínimos (si no son 0, deben ser >= 2500)
-      const solarValido = (presupuestoSolar === 0) || (presupuestoSolar >= 2500);
-      const eolicoValido = (presupuestoEolico === 0) || (presupuestoEolico >= 2500);
+      const solarValido = (presupuestoSolar === 0) || (presupuestoSolar >= 5000);
+      const eolicoValido = (presupuestoEolico === 0) || (presupuestoEolico >= 5000);
       
       // Mostrar botón solo si todas las condiciones se cumplen
       if (tieneValores && noAmbosCero && solarValido && eolicoValido) {
@@ -721,13 +721,13 @@ Swal.fire({
         document.getElementById('mensajeInicial').style.display = 'block';
         
         // Agregar indicadores visuales para campos con problemas
-        if (presupuestoSolar > 0 && presupuestoSolar < 2500) {
+        if (presupuestoSolar > 0 && presupuestoSolar < 5000) {
           document.getElementById('presupuestoSolar').classList.add('input-validation-error');
         } else {
           document.getElementById('presupuestoSolar').classList.remove('input-validation-error');
         }
         
-        if (presupuestoEolico > 0 && presupuestoEolico < 2500) {
+        if (presupuestoEolico > 0 && presupuestoEolico < 5000) {
           document.getElementById('presupuestoEolico').classList.add('input-validation-error');
         } else {
           document.getElementById('presupuestoEolico').classList.remove('input-validation-error');

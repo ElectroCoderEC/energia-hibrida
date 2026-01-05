@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Carpetas del proyecto a ignorar
+data/
+datos_energia_renovable/
+datos_renewable_chimborazo/
+documentos/
+LINKEDIN/
+modelo_energia_renovable/
+modelos/
+PRUEBAS_ANTERIORES/
+resultados/
+resultados_ml/
+resultados_ml_renewable/
+SISTEMA/
+visualizaciones/
+OTRAS PRUEBAS/
+static/datos/
+OLD/
+static/audio/efectos/
+
+01_costos_5_instituciones_chimborazo.png
+02_autosuficiencia_roi_ml_optimizado.png
+03_energia_generada_vs_consumo_5inst.png
+Presentacion.pptx
+
+explicacion_costos_renovables1.png
+explicacion_costos_renovables2.png
+grafico_autosuficiencia_roi.png
+grafico_costos_instituciones.png
+grafico_costos_instituciones.png
+grafico_energia_consumo.png
+# Archivos específicos a ignorar
+*.xlsx
+*.xls
+*.csv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak

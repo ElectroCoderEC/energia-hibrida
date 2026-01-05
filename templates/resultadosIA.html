@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESULTADOS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --purple-dark: #1d3557;
+            --purple-light: #0052b3;
+            --green-accent: #27ae60;
+            --orange-accent: #f39c12;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("images/fondo4.png") no-repeat center;
+            background-size: cover;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .content-container {
+            position: relative;
+            z-index: 1;
+            color: black;
+            padding: 40px 0;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .description {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        
+        .edit-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #1d3557;
+            color: white;
+            border: 1px solid white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .edit-btn:hover {
+            background-color: #0052b3;
+            color: white;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card-title {
+            color: var(--purple-dark);
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-icon {
+            color: var(--purple-light);
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .info-value {
+            color: var(--purple-dark);
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .btn-purple {
+            background-color: var(--purple-dark);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-purple:hover {
+            background-color: var(--purple-light);
+            color: white;
+        }
+
+        .btn-equipos {
+            background-color: var(--green-accent);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: bold;
+            border: none;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-equipos:hover {
+            background-color: #229954;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .top-image {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: auto;
+            display: block;
+        }
+
+        .separator {
+            border: 0;
+            height: 3px;
+            background-color: #ccc;
+            margin: 0 5px;
+        }
+
+        /* Loader styles */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1.5s ease-out;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #content {
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+        }
+        
+        .fade-in {
+            opacity: 1 !important;
+        }
+
+        /* Modal styles */
+        .modal-header {
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-light));
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .equipment-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--purple-light);
+        }
+
+        .equipment-name {
+            font-weight: bold;
+            color: var(--purple-dark);
+            margin-bottom: 5px;
+        }
+
+        .equipment-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .equipment-price {
+            font-weight: bold;
+            color: var(--green-accent);
+            font-size: 16px;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid var(--green-accent);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .co2-highlight {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--green-accent);
+        }
+
+        .co2-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--green-accent);
+        }
+
+        .energy-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .equipment-category {
+            background: var(--purple-dark);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 0 10px 0;
+            font-weight: bold;
+        }
+
+        .cost-breakdown {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .roi-indicator {
+            background: linear-gradient(135deg, #ff7675, #fab1a0);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+    <div class="spinner"></div>
+</div>
+
+<!-- Contenido principal -->
+<div id="content">
+    <div class="bg-overlay">
+        <div class="content-container container">
+            <div class="row">
+                <div class="col-md-7">
+                    <img class="top-image" src="images/logo_mejor.png">
+                    <h1>Solución a medida con Machine Learning</h1>
+                    <p class="description" style="text-align: justify;">
+                        El sistema se adapta a cualquier entorno con las necesidades energéticas que requiere cualquier centro educativo que desee un cambio positivo en el medio ambiente. A continuación se presentan los detalles calculados por un agente de IA.
+                    </p>
+                    <a href="presupuesto.html" class="edit-btn">EDITAR LA SIMULACIÓN &gt;</a>
+                </div>
+                <div class="col-md-5">
+                    <div class="card">
+                        <h1 class="card-title">Resumen del Sistema Híbrido Calculado</h1>
+                        
+                        <!-- Sección Energía Fotovoltaica -->
+                        <div class="energy-section">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="images/ic_solar.png" alt="Icono Solar" style="width: 40px; height: 40px; margin-right: 15px; margin-bottom: 10px;">
+                                    <h5 class="m-0 text-white" style="border-radius: 25px; background-color: var(--purple-dark); padding: 10px;"><i>Energía Fotovoltaica</i></h5>
+                                </div>
+                            </div>
+                            <hr style="border-color:black;">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-sun"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="solar-capacity">0 kWp</p>
+                                            <p class="info-label">Potencia de la planta</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="solar-savings">0 $ / año</p>
+                                            <p class="info-label">Ahorro</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="solar-energy">0 KWh / año</p>
+                                            <p class="info-label">Energía producida</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-leaf"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="solar-co2">0 ton / año</p>
+                                            <p class="info-label">CO2 evitado</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-equipos" onclick="mostrarEquiposSolar()">
+                                <i class="fas fa-solar-panel"></i> Ver Equipos Solares
+                            </button>
+                        </div>
+
+                        <!-- Sección Energía Eólica -->
+                        <div class="energy-section">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="images/ic_turbina.png" alt="Icono turbina" style="width: 40px; height: 40px; margin-right: 15px; margin-bottom: 10px;">
+                                    <h5 class="m-0 text-white" style="border-radius: 25px; background-color: var(--purple-dark); padding: 10px;"><i>Energía Eólica</i></h5>
+                                </div>
+                            </div>
+                            <hr style="border-color:black;">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-wind"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="wind-capacity">0 kW</p>
+                                            <p class="info-label">Potencia de la planta</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="wind-savings">0 $ / año</p>
+                                            <p class="info-label">Ahorro</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="wind-energy">0 KWh / año</p>
+                                            <p class="info-label">Energía producida</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex">
+                                        <div class="info-icon">
+                                            <i class="fas fa-leaf"></i>
+                                        </div>
+                                        <div>
+                                            <p class="info-value" id="wind-co2">0 ton / año</p>
+                                            <p class="info-label">CO2 evitado</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-equipos" onclick="mostrarEquiposEolicos()">
+                                <i class="fas fa-wind"></i> Ver Equipos Eólicos
+                            </button>
+                        </div>
+
+                        <!-- Resumen total CO2 -->
+                        <div class="co2-highlight">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5><i class="fas fa-tree"></i> Impacto Ambiental Total</h5>
+                                    <p class="mb-0">CO2 evitado anualmente</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="co2-value" id="total-co2">0 ton</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ROI Indicator -->
+                        <div class="roi-indicator">
+                            <h5><i class="fas fa-chart-line"></i> Retorno de Inversión</h5>
+                            <div id="roi-years">Calculando...</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-danger" onclick="mostrarDetallesCompletos()">VER DETALLES COMPLETOS</button>
+                            <button class="btn btn-equipos" onclick="mostrarTodosEquipos()">
+                                <i class="fas fa-list"></i> Ver Todos los Equipos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Equipos Solares -->
+<div class="modal fade" id="modalEquiposSolar" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-solar-panel"></i> Equipos del Sistema Solar
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="contenido-equipos-solar">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-purple" onclick="mostrarGraficosSolar()">
+                    <i class="fas fa-chart-bar"></i> Ver Gráficos
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Equipos Eólicos -->
+<div class="modal fade" id="modalEquiposEolicos" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-wind"></i> Equipos del Sistema Eólico
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="contenido-equipos-eolicos">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-purple" onclick="mostrarGraficosEolicos()">
+                    <i class="fas fa-chart-bar"></i> Ver Gráficos
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Todos los Equipos -->
+<div class="modal fade" id="modalTodosEquipos" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-cogs"></i> Sistema Híbrido Completo - Lista de Equipos
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="contenido-todos-equipos">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-purple" onclick="mostrarGraficosCompletos()">
+                    <i class="fas fa-chart-line"></i> Ver Análisis Completo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Gráficos -->
+<div class="modal fade" id="modalGraficos" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo-graficos">
+                    <i class="fas fa-chart-area"></i> Análisis Gráfico del Sistema
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="contenido-graficos">
+                <!-- Gráficos dinámicos -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-purple" onclick="descargarReporte()">
+                    <i class="fas fa-download"></i> Descargar Reporte
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Datos del sistema calculado (estos vendrían del backend/ML)
+let sistemaCalculado = {
+    solar: {
+        capacidad_kwp: 129,
+        energia_anual_kwh: 52304,
+        ahorro_anual_usd: 221.26,
+        co2_evitado_ton: 51,
+        equipos: [
+            {
+                categoria: "Paneles Solares",
+                items: [
+                    { nombre: "Panel Monocristalino 450W", cantidad: 287, precio_unitario: 180, precio_total: 51660 },
+                    { nombre: "Estructura de Montaje", cantidad: 129, precio_unitario: 150, precio_total: 19350 }
+                ]
+            },
+            {
+                categoria: "Equipos de Control",
+                items: [
+                    { nombre: "Inversor Híbrido 5kW", cantidad: 26, precio_unitario: 1200, precio_total: 31200 },
+                    { nombre: "Controlador MPPT 60A", cantidad: 13, precio_unitario: 300, precio_total: 3900 }
+                ]
+            }
+        ]
+    },
+    eolico: {
+        capacidad_kw: 53,
+        energia_anual_kwh: 20304,
+        ahorro_anual_usd: 391.75,
+        co2_evitado_ton: 36,
+        equipos: [
+            {
+                categoria: "Aerogeneradores",
+                items: [
+                    { nombre: "Aerogenerador Horizontal 3kW", cantidad: 18, precio_unitario: 4000, precio_total: 72000 },
+                    { nombre: "Torre 12m Galvanizada", cantidad: 18, precio_unitario: 2500, precio_total: 45000 }
+                ]
+            },
+            {
+                categoria: "Sistema de Control",
+                items: [
+                    { nombre: "Controlador Eólico 60A", cantidad: 9, precio_unitario: 380, precio_total: 3420 },
+                    { nombre: "Sistema de Frenado", cantidad: 18, precio_unitario: 200, precio_total: 3600 }
+                ]
+            }
+        ]
+    },
+    baterias: {
+        capacidad_kwh: 250,
+        equipos: [
+            {
+                categoria: "Sistema de Almacenamiento",
+                items: [
+                    { nombre: "Batería Litio 10kWh", cantidad: 25, precio_unitario: 4200, precio_total: 105000 },
+                    { nombre: "BMS Sistema de Gestión", cantidad: 5, precio_unitario: 800, precio_total: 4000 }
+                ]
+            }
+        ]
+    },
+    accesorios: {
+        equipos: [
+            {
+                categoria: "Instalación y Accesorios",
+                items: [
+                    { nombre: "Cableado DC y AC", cantidad: 1, precio_unitario: 8500, precio_total: 8500 },
+                    { nombre: "Gabinetes de Protección", cantidad: 8, precio_unitario: 500, precio_total: 4000 },
+                    { nombre: "Sistema de Monitoreo", cantidad: 1, precio_unitario: 2500, precio_total: 2500 },
+                    { nombre: "Instalación y Puesta en Marcha", cantidad: 1, precio_unitario: 15000, precio_total: 15000 }
+                ]
+            }
+        ]
+    }
+};
+
+// Calcular totales
+function calcularTotales() {
+    const totalCO2 = sistemaCalculado.solar.co2_evitado_ton + sistemaCalculado.eolico.co2_evitado_ton;
+    const totalAhorro = sistemaCalculado.solar.ahorro_anual_usd + sistemaCalculado.eolico.ahorro_anual_usd;
+    
+    // Calcular costo total
+    let costoTotal = 0;
+    ['solar', 'eolico', 'baterias', 'accesorios'].forEach(sistema => {
+        sistemaCalculado[sistema].equipos.forEach(categoria => {
+            categoria.items.forEach(item => {
+                costoTotal += item.precio_total;
+            });
+        });
+    });
+    
+    const roi = costoTotal / totalAhorro;
+    
+    return { totalCO2, totalAhorro, costoTotal, roi };
+}
+
+// Actualizar interfaz con datos calculados
+function actualizarInterfaz() {
+    const { totalCO2, totalAhorro, costoTotal, roi } = calcularTotales();
+    
+    // Actualizar valores solares
+    document.getElementById('solar-capacity').textContent = `${sistemaCalculado.solar.capacidad_kwp} kWp`;
+    document.getElementById('solar-energy').textContent = `${sistemaCalculado.solar.energia_anual_kwh.toLocaleString()} kWh / año`;
+    document.getElementById('solar-savings').textContent = `${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)} $ / año`;
+    document.getElementById('solar-co2').textContent = `${sistemaCalculado.solar.co2_evitado_ton} ton / año`;
+    
+    // Actualizar valores eólicos
+    document.getElementById('wind-capacity').textContent = `${sistemaCalculado.eolico.capacidad_kw} kW`;
+    document.getElementById('wind-energy').textContent = `${sistemaCalculado.eolico.energia_anual_kwh.toLocaleString()} kWh / año`;
+    document.getElementById('wind-savings').textContent = `${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)} $ / año`;
+    document.getElementById('wind-co2').textContent = `${sistemaCalculado.eolico.co2_evitado_ton} ton / año`;
+    
+    // Actualizar totales
+    document.getElementById('total-co2').textContent = `${totalCO2} ton`;
+    document.getElementById('roi-years').textContent = `${roi.toFixed(1)} años`;
+}
+
+// Mostrar equipos solares
+function mostrarEquiposSolar() {
+    const contenido = document.getElementById('contenido-equipos-solar');
+    let html = '';
+    
+    sistemaCalculado.solar.equipos.forEach(categoria => {
+        html += `<div class="equipment-category">${categoria.categoria}</div>`;
+        categoria.items.forEach(item => {
+            html += `
+                <div class="equipment-item">
+                    <div class="equipment-name">${item.nombre}</div>
+                    <div class="equipment-details">
+                        Cantidad: ${item.cantidad} | Precio unitario: $${item.precio_unitario.toLocaleString()}
+                    </div>
+                    <div class="equipment-price">Total: $${item.precio_total.toLocaleString()}</div>
+                </div>
+            `;
+        });
+    });
+    
+    // Calcular total solar
+    let totalSolar = 0;
+    sistemaCalculado.solar.equipos.forEach(categoria => {
+        categoria.items.forEach(item => totalSolar += item.precio_total);
+    });
+    
+    html += `
+        <div class="total-section">
+            <h5><i class="fas fa-calculator"></i> Resumen Sistema Solar</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Costo Total: $${totalSolar.toLocaleString()}</strong><br>
+                    <span class="text-muted">Capacidad: ${sistemaCalculado.solar.capacidad_kwp} kWp</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Ahorro Anual: $${sistemaCalculado.solar.ahorro_anual_usd.toFixed(2)}</strong><br>
+                    <span class="text-muted">ROI: ${(totalSolar / sistemaCalculado.solar.ahorro_anual_usd).toFixed(1)} años</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    contenido.innerHTML = html;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalEquiposSolar'));
+    modal.show();
+}
+
+// Mostrar equipos eólicos
+function mostrarEquiposEolicos() {
+    const contenido = document.getElementById('contenido-equipos-eolicos');
+    let html = '';
+    
+    sistemaCalculado.eolico.equipos.forEach(categoria => {
+        html += `<div class="equipment-category">${categoria.categoria}</div>`;
+        categoria.items.forEach(item => {
+            html += `
+                <div class="equipment-item">
+                    <div class="equipment-name">${item.nombre}</div>
+                    <div class="equipment-details">
+                        Cantidad: ${item.cantidad} | Precio unitario: ${item.precio_unitario.toLocaleString()}
+                    </div>
+                    <div class="equipment-price">Total: ${item.precio_total.toLocaleString()}</div>
+                </div>
+            `;
+        });
+    });
+    
+    // Calcular total eólico
+    let totalEolico = 0;
+    sistemaCalculado.eolico.equipos.forEach(categoria => {
+        categoria.items.forEach(item => totalEolico += item.precio_total);
+    });
+    
+    html += `
+        <div class="total-section">
+            <h5><i class="fas fa-calculator"></i> Resumen Sistema Eólico</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Costo Total: ${totalEolico.toLocaleString()}</strong><br>
+                    <span class="text-muted">Capacidad: ${sistemaCalculado.eolico.capacidad_kw} kW</span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Ahorro Anual: ${sistemaCalculado.eolico.ahorro_anual_usd.toFixed(2)}</strong><br>
+                    <span class="text-muted">ROI: ${(totalEolico / sistemaCalculado.eolico.ahorro_anual_usd).toFixed(1)} años</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    contenido.innerHTML = html;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalEquiposEolicos'));
+    modal.show();
+}
+
+// Mostrar todos los equipos
+function mostrarTodosEquipos() {
+    const contenido = document.getElementById('contenido-todos-equipos');
+    const { totalCO2, totalAhorro, costoTotal, roi } = calcularTotales();
+    
+    let html = `
+        <div class="row">
+            <div class="col-md-8">
+                <h4><i class="fas fa-info-circle"></i> Resumen Ejecutivo</h4>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-primary text-white rounded">
+                            <h5>${sistemaCalculado.solar.capacidad_kwp + sistemaCalculado.eolico.capacidad_kw} kW</h5>
+                            <small>Capacidad Total</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-success text-white rounded">
+                            <h5>${totalAhorro.toFixed(0)}</h5>
+                            <small>Ahorro Anual</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-warning text-white rounded">
+                            <h5>${totalCO2} ton</h5>
+                            <small>CO2 Evitado/año</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-info text-white rounded">
+                            <h5>${roi.toFixed(1)} años</h5>
+                            <small>ROI</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cost-breakdown">
+                    <h5><i class="fas fa-dollar-sign"></i> Inversión Total</h5>
+                    <h3 class="text-primary">${costoTotal.toLocaleString()}</h3>
+                    <small class="text-muted">Sistema completo instalado</small>
+                </div>
+            </div>
+        </div>
+        <hr>
+    `;
+    
+    // Agregar todos los sistemas
+    const sistemas = [
+        { nombre: 'Sistema Solar', datos: sistemaCalculado.solar, icono: 'fa-solar-panel', color: 'warning' },
+        { nombre: 'Sistema Eólico', datos: sistemaCalculado.eolico, icono: 'fa-wind', color: 'info' },
+        { nombre: 'Sistema de Baterías', datos: sistemaCalculado.baterias, icono: 'fa-battery-full', color: 'success' },
+        { nombre: 'Accesorios e Instalación', datos: sistemaCalculado.accesorios, icono: 'fa-tools', color: 'secondary' }
+    ];
+    
+    sistemas.forEach(sistema => {
+        html += `
+            <div class="mb-4">
+                <h4 class="text-${sistema.color}"><i class="fas ${sistema.icono}"></i> ${sistema.nombre}</h4>
+        `;
+        
+        sistema.datos.equipos.forEach(categoria => {
+            html += `<div class="equipment-category">${categoria.categoria}</div>`;
+            categoria.items.forEach(item => {
+                html += `
+                    <div class="equipment-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="equipment-name">${item.nombre}</div>
+                                <div class="equipment-details">Cantidad: ${item.cantidad}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Precio unitario:</small><br>
+                                <strong>${item.precio_unitario.toLocaleString()}</strong>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Precio total:</small><br>
+                                <div class="equipment-price">${item.precio_total.toLocaleString()}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        
+        html += '</div>';
+    });
+    
+    // Agregar análisis financiero
+    html += `
+        <div class="total-section">
+            <h4><i class="fas fa-chart-pie"></i> Análisis Financiero Detallado</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Flujo de Caja (10 años)</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Inversión inicial:</strong> -${costoTotal.toLocaleString()}</li>
+                        <li><strong>Ahorro anual:</strong> +${totalAhorro.toFixed(0)}</li>
+                        <li><strong>Mantenimiento anual:</strong> -${(costoTotal * 0.02).toFixed(0)}</li>
+                        <li><strong>Ahorro neto anual:</strong> +${(totalAhorro - costoTotal * 0.02).toFixed(0)}</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6>Impacto Ambiental (25 años)</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>CO2 evitado total:</strong> ${totalCO2 * 25} toneladas</li>
+                        <li><strong>Equivalente a plantar:</strong> ${Math.round(totalCO2 * 25 * 16)} árboles</li>
+                        <li><strong>Energía limpia generada:</strong> ${((sistemaCalculado.solar.energia_anual_kwh + sistemaCalculado.eolico.energia_anual_kwh) * 25 / 1000).toFixed(0)} MWh</li>
+                        <li><strong>Reducción huella carbono:</strong> ${((totalCO2 * 25) / 1000).toFixed(1)} kt CO2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    contenido.innerHTML = html;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalTodosEquipos'));
+    modal.show();
+}
+
+// Mostrar gráficos solares
+function mostrarGraficosSolar() {
+    const contenido = document.getElementById('contenido-graficos');
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-solar-panel"></i> Análisis Gráfico - Sistema Solar';
+    
+    contenido.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartSolarGeneracion"></canvas>
+                </div>
+                <h6 class="text-center">Generación Solar Mensual</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartSolarCostos"></canvas>
+                </div>
+                <h6 class="text-center">Distribución de Costos Solares</h6>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartSolarROI"></canvas>
+                </div>
+                <h6 class="text-center">Retorno de Inversión Solar</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartSolarCO2"></canvas>
+                </div>
+                <h6 class="text-center">CO2 Evitado Acumulado</h6>
+            </div>
+        </div>
+    `;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalGraficos'));
+    modal.show();
+    
+    // Crear gráficos después de que el modal se muestre
+    setTimeout(() => {
+        crearGraficosSolar();
+    }, 300);
+}
+
+// Mostrar gráficos eólicos
+function mostrarGraficosEolicos() {
+    const contenido = document.getElementById('contenido-graficos');
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-wind"></i> Análisis Gráfico - Sistema Eólico';
+    
+    contenido.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartEolicoGeneracion"></canvas>
+                </div>
+                <h6 class="text-center">Generación Eólica Mensual</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartEolicoCostos"></canvas>
+                </div>
+                <h6 class="text-center">Distribución de Costos Eólicos</h6>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="chart-container">
+                    <canvas id="chartVientoVelocidad"></canvas>
+                </div>
+                <h6 class="text-center">Perfil de Viento Promedio</h6>
+            </div>
+        </div>
+    `;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalGraficos'));
+    modal.show();
+    
+    setTimeout(() => {
+        crearGraficosEolicos();
+    }, 300);
+}
+
+// Mostrar análisis completo
+function mostrarGraficosCompletos() {
+    const contenido = document.getElementById('contenido-graficos');
+    document.getElementById('titulo-graficos').innerHTML = '<i class="fas fa-chart-area"></i> Análisis Completo del Sistema Híbrido';
+    
+    contenido.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartComparativoGeneracion"></canvas>
+                </div>
+                <h6 class="text-center">Comparativo Generación Anual</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartComparativoCostos"></canvas>
+                </div>
+                <h6 class="text-center">Comparativo de Inversiones</h6>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartFlujoFinanciero"></canvas>
+                </div>
+                <h6 class="text-center">Flujo Financiero Proyectado (10 años)</h6>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="chartImpactoAmbiental"></canvas>
+                </div>
+                <h6 class="text-center">Impacto Ambiental Acumulado</h6>
+            </div>
+        </div>
+    `;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalGraficos'));
+    modal.show();
+    
+    setTimeout(() => {
+        crearGraficosCompletos();
+    }, 300);
+}
+
+// Crear gráficos solares
+function crearGraficosSolar() {
+    // Gráfico de generación mensual
+    const ctxGeneracion = document.getElementById('chartSolarGeneracion').getContext('2d');
+    new Chart(ctxGeneracion, {
+        type: 'line',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            datasets: [{
+                label: 'Generación Solar (kWh)',
+                data: [3800, 3950, 4200, 4350, 4600, 4800, 5200, 5100, 4700, 4400, 4000, 3700],
+                borderColor: '#f39c12',
+                backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // Gráfico de costos
+    const ctxCostos = document.getElementById('chartSolarCostos').getContext('2d');
+    new Chart(ctxCostos, {
+        type: 'doughnut',
+        data: {
+            labels: ['Paneles', 'Inversores', 'Estructura', 'Instalación'],
+            datasets: [{
+                data: [51660, 31200, 19350, 15000],
+                backgroundColor: ['#f39c12', '#e74c3c', '#3498db', '#27ae60']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Gráfico ROI
+    const ctxROI = document.getElementById('chartSolarROI').getContext('2d');
+    new Chart(ctxROI, {
+        type: 'bar',
+        data: {
+            labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+            datasets: [{
+                label: 'Flujo Acumulado ($)',
+                data: [-117210, -117210 + 221.26, -117210 + 442.52, -117210 + 663.78, -117210 + 885.04],
+                backgroundColor: ['#e74c3c', '#e74c3c', '#e74c3c', '#f39c12', '#27ae60']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Gráfico CO2
+    const ctxCO2 = document.getElementById('chartSolarCO2').getContext('2d');
+    new Chart(ctxCO2, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 25}, (_, i) => `Año ${i + 1}`),
+            datasets: [{
+                label: 'CO2 Evitado Acumulado (ton)',
+                data: Array.from({length: 25}, (_, i) => 51 * (i + 1)),
+                borderColor: '#27ae60',
+                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Crear gráficos eólicos
+function crearGraficosEolicos() {
+    // Gráfico de generación mensual
+    const ctxGeneracion = document.getElementById('chartEolicoGeneracion').getContext('2d');
+    new Chart(ctxGeneracion, {
+        type: 'line',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            datasets: [{
+                label: 'Generación Eólica (kWh)',
+                data: [1800, 1650, 1750, 1900, 2100, 2300, 2100, 1950, 1800, 1600, 1500, 1650],
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Gráfico de costos
+    const ctxCostos = document.getElementById('chartEolicoCostos').getContext('2d');
+    new Chart(ctxCostos, {
+        type: 'doughnut',
+        data: {
+            labels: ['Aerogeneradores', 'Torres', 'Controladores', 'Instalación'],
+            datasets: [{
+                data: [72000, 45000, 3420, 12000],
+                backgroundColor: ['#3498db', '#9b59b6', '#e67e22', '#1abc9c']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Gráfico de velocidad de viento
+    const ctxViento = document.getElementById('chartVientoVelocidad').getContext('2d');
+    new Chart(ctxViento, {
+        type: 'radar',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            datasets: [{
+                label: 'Velocidad del Viento (m/s)',
+                data: [6.2, 5.8, 6.1, 6.8, 7.5, 8.2, 7.8, 7.2, 6.5, 5.9, 5.5, 6.0],
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                pointBackgroundColor: '#3498db'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Crear gráficos completos
+function crearGraficosCompletos() {
+    // Comparativo de generación
+    const ctxComparativo = document.getElementById('chartComparativoGeneracion').getContext('2d');
+    new Chart(ctxComparativo, {
+        type: 'bar',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            datasets: [
+                {
+                    label: 'Solar (kWh)',
+                    data: [3800, 3950, 4200, 4350, 4600, 4800, 5200, 5100, 4700, 4400, 4000, 3700],
+                    backgroundColor: '#f39c12'
+                },
+                {
+                    label: 'Eólica (kWh)',
+                    data: [1800, 1650, 1750, 1900, 2100, 2300, 2100, 1950, 1800, 1600, 1500, 1650],
+                    backgroundColor: '#3498db'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    });
+    
+    // Comparativo de costos
+    const ctxCostosComp = document.getElementById('chartComparativoCostos').getContext('2d');
+    new Chart(ctxCostosComp, {
+        type: 'pie',
+        data: {
+            labels: ['Sistema Solar', 'Sistema Eólico', 'Baterías', 'Accesorios'],
+            datasets: [{
+                data: [117210, 132420, 109000, 30000],
+                backgroundColor: ['#f39c12', '#3498db', '#27ae60', '#95a5a6']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Flujo financiero
+    const ctxFlujo = document.getElementById('chartFlujoFinanciero').getContext('2d');
+    const costoTotal = 388630;
+    const ahorroAnual = 613;
+    const mantenimientoAnual = costoTotal * 0.02;
+    const ahorroNeto = ahorroAnual - mantenimientoAnual;
+    
+    const flujoAcumulado = [];
+    let acumulado = -costoTotal;
+    for (let i = 0; i < 10; i++) {
+        acumulado += ahorroNeto;
+        flujoAcumulado.push(acumulado);
+    }
+    
+    new Chart(ctxFlujo, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 10}, (_, i) => `Año ${i + 1}`),
+            datasets: [{
+                label: 'Flujo Acumulado ($)',
+                data: flujoAcumulado,
+                borderColor: '#e74c3c',
+                backgroundColor: function(context) {
+                    return context.parsed.y >= 0 ? 'rgba(39, 174, 96, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+                },
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    grid: {
+                        color: function(context) {
+                            return context.tick.value === 0 ? '#000' : '#e0e0e0';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Impacto ambiental
+    const ctxAmbiental = document.getElementById('chartImpactoAmbiental').getContext('2d');
+    new Chart(ctxAmbiental, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 25}, (_, i) => i + 1),
+            datasets: [
+                {
+                    label: 'CO2 Solar (ton)',
+                    data: Array.from({length: 25}, (_, i) => 51 * (i + 1)),
+                    borderColor: '#f39c12',
+                    fill: false
+                },
+                {
+                    label: 'CO2 Eólico (ton)',
+                    data: Array.from({length: 25}, (_, i) => 36 * (i + 1)),
+                    borderColor: '#3498db',
+                    fill: false
+                },
+                {
+                    label: 'CO2 Total (ton)',
+                    data: Array.from({length: 25}, (_, i) => 87 * (i + 1)),
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Mostrar detalles completos
+function mostrarDetallesCompletos() {
+    // Aquí podrías redirigir a una página completa de detalles
+    // o mostrar un modal muy detallado
+    console.log('Mostrando detalles completos...');
+    mostrarTodosEquipos();
+}
+
+// Descargar reporte
+function descargarReporte() {
+    // Aquí implementarías la funcionalidad de descarga
+    alert('Funcionalidad de descarga en desarrollo. El reporte se generará en PDF con todos los datos del sistema.');
+}
+
+// Inicializar cuando la página carga
+window.addEventListener('load', function() {
+    // Simulación de carga
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    
+    loader.addEventListener('transitionend', function() {
+        loader.style.display = 'none';
+        document.getElementById('content').classList.add('fade-in');
+        
+        // Actualizar interfaz con datos calculados
+        setTimeout(() => {
+            actualizarInterfaz();
+        }, 500);
+    });
+});
+
+// Función para integrar con el backend ML (cuando esté disponible)
+function integrarConBackendML() {
+    // Esta función se llamaría para obtener datos reales del modelo ML
+    // Por ahora usa datos simulados
+    
+    fetch('/api/predict-system', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            // Datos del formulario anterior
+            latitud: -1.65,
+            longitud: -78.65,
+            altitud_m: 3200,
+            area_disponible_techo_m2: 400,
+            area_disponible_terreno_m2: 800,
+            numero_estudiantes: 75,
+            consumo_mensual_kwh: 350,
+            presupuesto_solar_usd: 150000,
+            presupuesto_eolico_usd: 130000
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Actualizar sistemaCalculado con datos reales
+        sistemaCalculado = data;
+        actualizarInterfaz();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Mantener datos simulados en caso de error
+    });
+}
+</script>
+
+</body>
+</html>
