@@ -404,7 +404,7 @@ class ConsumosManager:
 
 
 class RenewableSystemPredictor:
-    def __init__(self, model_path="modelo_renewable_chimborazo"):
+    def __init__(self, model_path="modelo_energia_renovable"):
         self.predictor = None
         self.load_model(model_path)
 
