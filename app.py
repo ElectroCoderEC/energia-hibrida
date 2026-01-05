@@ -4,7 +4,7 @@ print(sys.version)
 
 import os
 from flask import Flask, render_template, jsonify, request
-from flask_socketio import SocketIO, emit
+#from flask_socketio import SocketIO, emit
 import json
 from datetime import datetime
 import pygame
